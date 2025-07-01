@@ -1324,7 +1324,7 @@
             
             // ... (other functions remain the same) ...
 
-// Add dark mode to code - FIXED VERSION
+// Add dark mode to code - PROPERLY FIXED
 function addDarkModeToCode() {
     const darkModeCSS = `
   body {
@@ -1385,27 +1385,36 @@ function addDarkModeToCode() {
       }
     });`;
 
-    // Add dark mode CSS to the code editor
     const currentCode = htmlEditor.value;
+    
+    // Insert CSS properly
+    let newCode = currentCode;
     if (!currentCode.includes('body.light-mode')) {
-        // Insert CSS into the style block
-        const styleEnd = currentCode.indexOf('</style>');
-        const newCode = currentCode.substring(0, styleEnd) + 
+        const styleTagEnd = newCode.indexOf('</style>');
+        if (styleTagEnd !== -1) {
+            newCode = newCode.substring(0, styleTagEnd) + 
                       darkModeCSS + 
-                      currentCode.substring(styleEnd);
-        
-        // Insert JavaScript into the script block
-        const scriptEnd = newCode.indexOf('</script>');
-        const finalCode = newCode.substring(0, scriptEnd) + 
-                        darkModeJS + 
-                        newCode.substring(scriptEnd);
-        
-        htmlEditor.value = finalCode;
+                      newCode.substring(styleTagEnd);
+        }
+    }
+
+    // Insert JS properly
+    if (!currentCode.includes('themeToggle')) {
+        const scriptTagEnd = newCode.indexOf('</script>');
+        if (scriptTagEnd !== -1) {
+            newCode = newCode.substring(0, scriptTagEnd) + 
+                      darkModeJS + 
+                      newCode.substring(scriptTagEnd);
+        }
+    }
+
+    if (newCode !== currentCode) {
+        htmlEditor.value = newCode;
         updatePreview();
     }
 }
 
-// Add responsive styles - FIXED VERSION
+// Add responsive styles - PROPERLY FIXED
 function addResponsiveStyles() {
     const responsiveCode = `
     @media (max-width: 768px) {
@@ -1443,19 +1452,20 @@ function addResponsiveStyles() {
 
     const currentCode = htmlEditor.value;
     if (!currentCode.includes('@media (max-width: 768px)')) {
-        const styleEnd = currentCode.indexOf('</style>');
-        const newCode = currentCode.substring(0, styleEnd) + 
-                      responsiveCode + 
-                      currentCode.substring(styleEnd);
-        htmlEditor.value = newCode;
-        updatePreview();
+        const styleTagEnd = currentCode.indexOf('</style>');
+        if (styleTagEnd !== -1) {
+            const newCode = currentCode.substring(0, styleTagEnd) + 
+                          responsiveCode + 
+                          currentCode.substring(styleTagEnd);
+            htmlEditor.value = newCode;
+            updatePreview();
+        }
     }
 }
 
-// Add features section - FIXED VERSION
+// Add features section - PROPERLY FIXED
 function addFeaturesSection() {
-    const newFeatureCard = `
-      <div class="feature-card">
+    const newFeatureCard = `<div class="feature-card">
         <div class="feature-icon">
           <i class="fas fa-shield-alt"></i>
         </div>
@@ -1465,17 +1475,18 @@ function addFeaturesSection() {
 
     const currentCode = htmlEditor.value;
     if (!currentCode.includes('Secure & Reliable')) {
-        // Find the position of the closing features div
-        const featuresEnd = currentCode.indexOf('</div>', currentCode.indexOf('class="features"'));
-        const newCode = currentCode.substring(0, featuresEnd) + 
-                      newFeatureCard + 
-                      currentCode.substring(featuresEnd);
-        htmlEditor.value = newCode;
-        updatePreview();
+        const featuresContainer = currentCode.indexOf('</div>', currentCode.indexOf('class="features"'));
+        if (featuresContainer !== -1) {
+            const newCode = currentCode.substring(0, featuresContainer) + 
+                          newFeatureCard + 
+                          currentCode.substring(featuresContainer);
+            htmlEditor.value = newCode;
+            updatePreview();
+        }
     }
 }
 
-// Create database simulation - FIXED VERSION
+// Create database simulation - PROPERLY FIXED
 function createDatabase() {
     const dbCode = `
   // Database connection example
@@ -1502,12 +1513,14 @@ function createDatabase() {
 
     const currentCode = htmlEditor.value;
     if (!currentCode.includes('Database connection example')) {
-        const scriptEnd = currentCode.indexOf('</script>');
-        const newCode = currentCode.substring(0, scriptEnd) + 
-                      dbCode + 
-                      currentCode.substring(scriptEnd);
-        htmlEditor.value = newCode;
-        updatePreview();
+        const scriptTagEnd = currentCode.indexOf('</script>');
+        if (scriptTagEnd !== -1) {
+            const newCode = currentCode.substring(0, scriptTagEnd) + 
+                          dbCode + 
+                          currentCode.substring(scriptTagEnd);
+            htmlEditor.value = newCode;
+            updatePreview();
+        }
     }
 }
         
