@@ -14,31 +14,43 @@
         }
         
         :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4cc9f0;
-            --dark: #0f172a;
-            --darker: #0a0f1f;
-            --light: #f8f9fa;
-            --sidebar: #1e293b;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --code-bg: #1e1e1e;
+            --bg-darkest: #1a1a1a;
+            --bg-darker: #2c2c2c;
+            --bg-medium: #3e3e3e;
+            --bg-light-contrast: #4f4f4f; /* Renamed for clarity */
+            --text-light: #e0e0e0;
+            --text-medium: #b0b0b0;
+            --text-dark: #1a1a1a;
+            --accent-primary: #6c7a89; /* Muted blue-gray */
+            --accent-secondary: #95a5a6; /* Lighter muted blue-gray */
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --code-bg: #222222;
+            
+            /* Retaining original names for compatibility where direct replacement is not ideal,
+               but mapping them to the new palette. */
+            --primary: var(--accent-primary);
+            --secondary: var(--accent-secondary);
+            --accent: var(--accent-secondary); /* Or choose a specific accent if needed */
+            --dark: var(--bg-darker);
+            --darker: var(--bg-darkest);
+            --light: var(--text-light);
+            --sidebar: var(--bg-medium);
         }
         
         body {
-            background: linear-gradient(135deg, var(--darker), var(--dark));
-            color: var(--light);
+            background: linear-gradient(135deg, var(--bg-darkest), var(--bg-darker));
+            color: var(--text-light);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
         
         header {
-            background: rgba(30, 41, 59, 0.8);
+            background: rgba(44, 44, 44, 0.8); /* --bg-darker with alpha */
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(224, 224, 224, 0.1); /* --text-light with alpha */
             display: flex;
             align-items: center;
             padding: 0 20px;
@@ -53,13 +65,13 @@
         }
         
         .logo i {
-            color: var(--accent);
+            color: var(--accent-primary);
             font-size: 24px;
         }
         
         .logo h1 {
             font-size: 22px;
-            background: linear-gradient(to right, var(--accent), var(--primary));
+            background: linear-gradient(to right, var(--accent-secondary), var(--accent-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
@@ -72,9 +84,9 @@
         }
         
         .btn {
-            background: rgba(67, 97, 238, 0.2);
-            border: 1px solid var(--primary);
-            color: var(--light);
+            background: rgba(108, 122, 137, 0.2); /* accent-primary with alpha */
+            border: 1px solid var(--accent-primary);
+            color: var(--text-light);
             padding: 8px 16px;
             border-radius: 30px;
             font-weight: 600;
@@ -86,9 +98,9 @@
         }
         
         .btn:hover {
-            background: var(--primary);
+            background: var(--accent-primary);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            box-shadow: 0 5px 15px rgba(108, 122, 137, 0.3); /* accent-primary with alpha */
         }
         
         .btn i {
@@ -101,7 +113,7 @@
         }
         
         .btn-run:hover {
-            background: #059669;
+            background: #27ae60; /* Darker green */
         }
         
         .main-container {
@@ -112,8 +124,8 @@
         
         aside {
             width: 350px;
-            background: var(--sidebar);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--sidebar); /* Mapped to --bg-medium */
+            border-right: 1px solid rgba(224, 224, 224, 0.1); /* --text-light with alpha */
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -121,7 +133,7 @@
         
         .tab-buttons {
             display: flex;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(224, 224, 224, 0.1); /* --text-light with alpha */
         }
         
         .tab-btn {
@@ -129,7 +141,7 @@
             padding: 15px;
             background: transparent;
             border: none;
-            color: var(--light);
+            color: var(--text-light);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -137,8 +149,8 @@
         }
         
         .tab-btn.active {
-            background: rgba(67, 97, 238, 0.2);
-            border-bottom: 3px solid var(--primary);
+            background: rgba(108, 122, 137, 0.2); /* accent-primary with alpha */
+            border-bottom: 3px solid var(--accent-primary);
         }
         
         .tab-content {
@@ -172,7 +184,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            background: rgba(15, 23, 42, 0.5);
+            background: rgba(26, 26, 26, 0.5); /* --bg-darkest with alpha */
             border-radius: 10px;
             margin-bottom: 15px;
         }
@@ -187,21 +199,21 @@
         }
         
         .message.user {
-            background: rgba(67, 97, 238, 0.3);
-            border: 1px solid var(--primary);
+            background: rgba(108, 122, 137, 0.3); /* accent-primary with alpha */
+            border: 1px solid var(--accent-primary);
             align-self: flex-end;
         }
         
         .message.ai {
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(44, 44, 44, 0.8); /* --bg-darker with alpha */
+            border: 1px solid rgba(224, 224, 224, 0.1); /* --text-light with alpha */
             align-self: flex-start;
         }
         
         .message.thinking {
-            color: #94a3b8;
+            color: var(--text-medium);
             font-style: italic;
-            background: rgba(30, 41, 59, 0.5);
+            background: rgba(44, 44, 44, 0.5); /* --bg-darker with alpha */
         }
         
         .message .timestamp {
@@ -220,19 +232,19 @@
             flex: 1;
             padding: 12px 15px;
             border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(15, 23, 42, 0.5);
-            color: var(--light);
+            border: 1px solid rgba(224, 224, 224, 0.1); /* --text-light with alpha */
+            background: rgba(26, 26, 26, 0.5); /* --bg-darkest with alpha */
+            color: var(--text-light);
             outline: none;
             transition: border 0.3s ease;
         }
         
         .chat-input input:focus {
-            border-color: var(--accent);
+            border-color: var(--accent-secondary);
         }
         
         .chat-input button {
-            background: var(--primary);
+            background: var(--accent-primary);
             border: none;
             width: 45px;
             height: 45px;
@@ -245,12 +257,12 @@
         }
         
         .chat-input button:hover {
-            background: var(--secondary);
+            background: var(--accent-secondary);
             transform: scale(1.05);
         }
         
         .rules-container, .json-container {
-            background: rgba(15, 23, 42, 0.5);
+            background: rgba(26, 26, 26, 0.5); /* --bg-darkest with alpha */
             padding: 20px;
             border-radius: 10px;
             flex: 1;
@@ -259,7 +271,7 @@
         
         .rules-container h3, .json-container h3 {
             margin-bottom: 15px;
-            color: var(--accent);
+            color: var(--accent-secondary);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -273,8 +285,8 @@
             font-size: 1.1rem;
             margin-bottom: 10px;
             padding-bottom: 5px;
-            border-bottom: 1px solid var(--primary);
-            color: var(--accent);
+            border-bottom: 1px solid var(--accent-primary);
+            color: var(--accent-secondary);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -287,10 +299,10 @@
         }
         
         .rule-item {
-            background: rgba(30, 41, 59, 0.8);
+            background: rgba(44, 44, 44, 0.8); /* --bg-darker with alpha */
             padding: 12px 15px;
             border-radius: 8px;
-            border-left: 3px solid var(--primary);
+            border-left: 3px solid var(--accent-primary);
             transition: transform 0.2s ease;
         }
         
@@ -301,7 +313,7 @@
         .rule-title {
             font-weight: 600;
             margin-bottom: 5px;
-            color: var(--accent);
+            color: var(--accent-secondary);
         }
         
         pre {
@@ -311,7 +323,7 @@
             overflow-x: auto;
             font-size: 14px;
             line-height: 1.5;
-            color: #d4d4d4;
+            color: #dcdcdc; /* Slightly adjusted for code readability */
             max-height: 500px;
         }
         
@@ -324,11 +336,11 @@
         
         .editor-header {
             padding: 15px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(224, 224, 224, 0.1); /* --text-light with alpha */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(30, 41, 59, 0.8);
+            background: rgba(44, 44, 44, 0.8); /* --bg-darker with alpha */
         }
         
         .editor-header h2 {
@@ -339,27 +351,54 @@
         }
         
         .editor-header i {
-            color: var(--accent);
+            color: var(--accent-secondary);
+        }
+
+        .layout-controls {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px; /* Spacing from other controls */
+        }
+
+        .layout-btn i { /* Ensure icons in layout buttons are not too small */
+            font-size: 1em;
         }
         
         .editor-content {
             display: flex;
             flex: 1;
-            overflow: hidden;
+            overflow: hidden; /* Default is row */
+        }
+        
+        /* Specific layout class will be on editor-area */
+        .editor-area.layout-preview-top .editor-content {
+            flex-direction: column-reverse; 
+        }
+        .editor-area.layout-editor-top .editor-content {
+            flex-direction: column;
+        }
+
+        .editor-area.layout-editor-top .editor-panel,
+        .editor-area.layout-editor-top .preview-panel,
+        .editor-area.layout-preview-top .editor-panel,
+        .editor-area.layout-preview-top .preview-panel {
+            height: 50%; 
+            flex-grow: 1; /* Allow them to grow to fill the column space */
+            flex-basis: 0; /* Reset basis for even distribution */
         }
         
         .editor-panel, .preview-panel {
             flex: 1;
-            background: rgba(30, 41, 59, 0.8);
+            background: rgba(44, 44, 44, 0.8); /* --bg-darker with alpha */
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(224, 224, 224, 0.1); /* --text-light with alpha */
         }
         
         .panel-header {
             padding: 10px 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(224, 224, 224, 0.1); /* --text-light with alpha */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -373,7 +412,7 @@
         }
         
         .panel-header i {
-            color: var(--accent);
+            color: var(--accent-secondary);
             font-size: 14px;
         }
         
@@ -387,7 +426,7 @@
             height: 100%;
             padding: 15px;
             background: var(--code-bg);
-            color: #f8f8f2;
+            color: var(--text-light); /* Using text-light for editor text */
             border: none;
             outline: none;
             resize: none;
@@ -408,6 +447,29 @@
                 width: 300px;
             }
         }
+
+        function genericCodeModification() {
+            const timestamp = new Date().toLocaleString();
+            const comment = `\n    <!-- AI performed a generic modification at ${timestamp} -->`;
+            let currentCode = htmlEditor.value;
+
+            // Try to add the comment inside the body, or at the end of the head if body not found.
+            let insertPosition = currentCode.indexOf('</body>');
+            if (insertPosition === -1) {
+                insertPosition = currentCode.indexOf('</head>');
+            }
+            if (insertPosition === -1) { // Fallback: add to the end
+                insertPosition = currentCode.length;
+            }
+            
+            const newCode = currentCode.substring(0, insertPosition) + 
+                            comment + 
+                            currentCode.substring(insertPosition);
+            if (htmlEditor.value !== newCode) {
+                htmlEditor.value = newCode;
+                updatePreview(); // Ensure preview is updated
+            }
+        }
         
         @media (max-width: 900px) {
             .main-container {
@@ -426,16 +488,16 @@
         }
         
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(224, 224, 224, 0.05); /* --text-light with alpha */
         }
         
         ::-webkit-scrollbar-thumb {
-            background: var(--primary);
+            background: var(--accent-primary);
             border-radius: 4px;
         }
         
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary);
+            background: var(--accent-secondary);
         }
         
         /* Animations */
@@ -829,6 +891,9 @@
                     </div>
                 </div>
             </div>
+            <div class="disclaimer" style="padding: 15px 20px; font-size: 0.75rem; color: var(--text-medium); border-top: 1px solid rgba(224, 224, 224, 0.1); text-align: center;">
+                This AI assistant simulates functionality based on Replit's AI models and publicly available information. Tool definitions and operational prompts are adapted from resources provided by Replit, with development assistance from Jules AI. All rights to the original AI models and tools belong to Replit.
+            </div>
         </aside>
         
         <div class="editor-area">
@@ -841,6 +906,11 @@
                     <button class="btn" id="undo-btn">
                         <i class="fas fa-undo"></i> Undo
                     </button>
+                </div>
+                <div class="layout-controls">
+                    <button class="btn layout-btn active" data-layout="default" title="Side-by-side editor and preview"><i class="fas fa-columns"></i></button>
+                    <button class="btn layout-btn" data-layout="preview-top" title="Preview on top"><i class="fas fa-layer-group fa-rotate-180"></i></button> <!-- Custom: preview top -->
+                    <button class="btn layout-btn" data-layout="editor-top" title="Editor on top"><i class="fas fa-layer-group"></i></button> <!-- Custom: editor top -->
                 </div>
             </div>
             
@@ -1132,6 +1202,41 @@
         });
         
         // Enhanced AI chat functionality
+        let REPLIT_TOOLS = []; // Will be populated by loadReplitAiConfig
+
+        // Function to populate REPLIT_TOOLS from a JSON string
+        function loadReplitAiConfig(toolsJsonString) { // Now synchronous and takes string
+            // AI Attribution Comment
+            // This function simulates loading AI tool configurations, 
+            // based on structures like those provided by Replit.
+            try {
+                const toolsData = JSON.parse(toolsJsonString);
+                if (toolsData && toolsData.tools && Array.isArray(toolsData.tools)) {
+                    REPLIT_TOOLS = toolsData.tools.map(tool => ({ 
+                        name: tool.name, 
+                        description: tool.description 
+                        // Parameters can be added later: parameters: tool.parameters 
+                    }));
+                    console.log("Replit AI Config loaded from provided JSON. Tools count:", REPLIT_TOOLS.length);
+                } else {
+                    console.error("Invalid Tools JSON structure after parsing. toolsData:", toolsData);
+                    setDefaultTools();
+                }
+            } catch (error) {
+                console.error("Error parsing Tools JSON string:", error);
+                setDefaultTools();
+            }
+        }
+
+        function setDefaultTools() {
+            REPLIT_TOOLS = [ 
+                { name: "str_replace_editor", description: "For editing files." },
+                { name: "bash", description: "For running shell commands." },
+                { name: "Fallback_Tool", description: "Default tool due to loading error."}
+            ];
+            console.warn("Fell back to default tools because of an error loading/parsing the provided JSON.");
+        }
+        
         const chatInput = document.getElementById('chat-input');
         const sendBtn = document.getElementById('send-btn');
         const chatMessages = document.getElementById('chat-messages');
@@ -1199,131 +1304,111 @@
         
         // Generate AI response based on user input and rules
         function generateAIResponse(message) {
+            // AI Attribution Comment
+            // This function simulates AI responses and tool usage
+            // based on Replit's AI operational model and tool definitions.
+            // Development assistance for this simulator by Jules AI.
             const lowerMsg = message.toLowerCase();
-            const toolsUsed = [];
-            let response = "";
+            let responseFragment = ""; 
             let action = null;
-            
+            let toolsUsed = []; 
+
+            let baseResponse = "As your Replit AI assistant, I'll help you with that. ";
+
             if (lowerMsg.includes('hello') || lowerMsg.includes('hi')) {
-                response = "Hello! I'm your Replit AI assistant. How can I help you with your project today? Remember I prioritize Replit tools and aim for minimal back-and-forth.";
-                toolsUsed.push("restart_workflow");
-            }
-            else if (lowerMsg.includes('responsive') || lowerMsg.includes('mobile')) {
-                response = "I've optimized the website for responsiveness using CSS media queries. The layout now adapts to all device sizes.";
-                toolsUsed.push("str_replace_editor");
-                action = addResponsiveStyles;
-            }
-            else if (lowerMsg.includes('feature') || lowerMsg.includes('card')) {
-                response = "I've added a new features section. You can see the changes in the editor.";
-                toolsUsed.push("str_replace_editor");
-                action = addFeaturesSection;
-            }
-            else if (lowerMsg.includes('dark mode') || lowerMsg.includes('theme')) {
-                response = "Dark mode toggle implemented! I've added theme switching that saves to localStorage.";
-                toolsUsed.push("str_replace_editor", "bash");
+                responseFragment = "Hello! How can I assist you with your project on Replit today?";
+                toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "restart_workflow")?.name || "restart_workflow");
+            } else if (lowerMsg.includes('dark mode') || lowerMsg.includes('theme')) {
+                responseFragment = "I can help you with the dark mode. I'll use the `str_replace_editor` to modify the styles and JavaScript.";
                 action = addDarkModeToCode;
-            }
-            else if (lowerMsg.includes('database') || lowerMsg.includes('postgres')) {
-                response = "For PostgreSQL operations, I'll use the create_postgresql_database_tool. After creation, you'll get environment variables for connection.";
-                toolsUsed.push("create_postgresql_database_tool");
-                action = createDatabase;
-            }
-            else if (lowerMsg.includes('api') || lowerMsg.includes('key')) {
-                response = "I need to use the ask_secrets tool to request API keys. Please confirm if I should proceed to ask for necessary credentials.";
-                toolsUsed.push("ask_secrets");
+                toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "str_replace_editor")?.name || "str_replace_editor");
+            } else if (lowerMsg.includes('responsive') || lowerMsg.includes('mobile')) {
+                responseFragment = "Making the site responsive is a good idea. I'll use `str_replace_editor` to add the necessary CSS media queries.";
+                action = addResponsiveStyles;
+                toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "str_replace_editor")?.name || "str_replace_editor");
+            } else if (lowerMsg.includes('feature') || lowerMsg.includes('card')) {
+                responseFragment = "Adding a feature section sounds good. I'll use `str_replace_editor` to update the HTML structure.";
+                action = addFeaturesSection;
+                toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "str_replace_editor")?.name || "str_replace_editor");
+            } else if (lowerMsg.includes('database') || lowerMsg.includes('postgres')) {
+                responseFragment = "For database needs, I can set up a PostgreSQL instance using the `create_postgresql_database_tool`. This will make the necessary environment variables available for your application.";
+                action = createDatabase; 
+                toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "create_postgresql_database_tool")?.name || "create_postgresql_database_tool");
+            } else if (lowerMsg.includes('api key') || lowerMsg.includes('secret')) {
+                responseFragment = "If you need to use an API key or other secrets, I'll use the `ask_secrets` tool to request them from you. This ensures they are handled securely.";
                 action = requestAPIKey;
-            }
-            else if (lowerMsg.includes('deploy') || lowerMsg.includes('publish')) {
-                response = "I'll use the suggest_deploy tool since the project appears ready. Remember, deployment must be initiated manually by you through Replit.";
-                toolsUsed.push("suggest_deploy");
+                toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "ask_secrets")?.name || "ask_secrets");
+            } else if (lowerMsg.includes('deploy') || lowerMsg.includes('publish')) {
+                responseFragment = "When your project is ready, I can use the `suggest_deploy` tool. Replit Deployments will then handle the rest, making your app live.";
                 action = suggestDeployment;
+                toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "suggest_deploy")?.name || "suggest_deploy");
             }
-            else if (lowerMsg.includes('file') || lowerMsg.includes('edit')) {
-                response = "I'll use the str_replace_editor tool for this file operation. Please confirm the file path and operation details.";
-                toolsUsed.push("str_replace_editor");
-                action = editFile;
+            else if (lowerMsg.includes('contact form') || (lowerMsg.includes('add') && lowerMsg.includes('contact'))) {
+                responseFragment = "Okay, I can add a contact form to your page. I'll use the `str_replace_editor` to add the necessary HTML and CSS for a basic contact form.";
+                action = addContactFormToCode;
+                toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "str_replace_editor")?.name || "str_replace_editor");
             }
-            else if (lowerMsg.includes('tool') || lowerMsg.includes('json')) {
-                response = "All available tools are listed in the JSON Tools tab. I prioritize using Replit-native tools over external solutions.";
+            else if (lowerMsg.includes('install ') || (lowerMsg.includes('add ') && lowerMsg.includes('package')) || (lowerMsg.includes('use ') && (lowerMsg.includes('library') || lowerMsg.includes('package')))) {
+                let packageName = "unspecified_package";
+                const installRegex = /install\s+([a-zA-Z0-9_.-]+)/;
+                const addRegex = /add\s+([a-zA-Z0-9_.-]+)(\s+package)?/;
+                const useRegex = /use\s+([a-zA-Z0-9_.-]+)(\s+(library|package))?/;
+
+                let match;
+                if ((match = lowerMsg.match(installRegex)) && match[1]) {
+                    packageName = match[1];
+                } else if ((match = lowerMsg.match(addRegex)) && match[1]) {
+                    packageName = match[1];
+                } else if ((match = lowerMsg.match(useRegex)) && match[1]) {
+                    packageName = match[1];
+                }
+                
+                responseFragment = `Okay, I will simulate installing the '${packageName}' package for you. I'll use the \`packager_tool\` for this, as per Replit guidelines.`;
+                action = () => simulatePackageInstall(packageName); 
+                toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "packager_tool")?.name || "packager_tool");
+            }
+            else if (lowerMsg.includes('file') || lowerMsg.includes('edit') || lowerMsg.includes('change') || lowerMsg.includes('add') || lowerMsg.includes('create')) {
+                responseFragment = "I'll use the `str_replace_editor` tool to make those file modifications as you requested.";
+                action = editFile; 
+                toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "str_replace_editor")?.name || "str_replace_editor");
+            }
+             else if (lowerMsg.includes('tool') || lowerMsg.includes('json')) {
+                responseFragment = "All available tools, like `search_filesystem` or `packager_tool`, are configured based on standard Replit capabilities. You can see a representation in the JSON Tools tab. I prioritize these Replit tools.";
             }
             else if (lowerMsg.includes('rule') || lowerMsg.includes('policy')) {
-                response = "You can find all operational rules in the Rules tab. I strictly follow Communication Policy by using simple language and Data Integrity Policy for error handling.";
+                responseFragment = "I operate based on guidelines for expert software development on Replit, focusing on minimal back-and-forth and using Replit tools effectively. You can see a summary of these principles in the Rules tab.";
             }
             else {
-                response = "I've implemented your request following our operational rules. Would you like me to report progress using the report_progress tool?";
-                toolsUsed.push("str_replace_editor", "bash");
+                let foundTool = false;
+                for (const tool of REPLIT_TOOLS) {
+                    const descriptionWords = tool.description.toLowerCase().split(/\W+/);
+                    const messageWords = lowerMsg.split(/\W+/);
+                    if (messageWords.some(mw => mw.length > 3 && descriptionWords.some(dw => dw.includes(mw)))) {
+                        responseFragment = `Based on your request, the '${tool.name}' tool seems relevant. I'll proceed with that understanding.`;
+                        toolsUsed.push(tool.name);
+                        action = genericCodeModification; 
+                        foundTool = true;
+                        break;
+                    }
+                }
+                if (!foundTool) {
+                    responseFragment = "I'll use my general file editing capabilities (`str_replace_editor`) to address your request.";
+                    action = genericCodeModification;
+                    toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "str_replace_editor")?.name || "str_replace_editor");
+                }
+            }
+            
+            if (action && toolsUsed.length === 0) {
+                toolsUsed.push(REPLIT_TOOLS.find(t => t.name === "str_replace_editor")?.name || "str_replace_editor (default)");
             }
             
             return {
-                response,
+                response: baseResponse + responseFragment, 
                 tools: toolsUsed,
                 action
             };
         }
         
-        // Add dark mode to code
-        function addDarkModeToCode() {
-            const darkModeCSS = `
-  body {
-    transition: background 0.5s ease, color 0.3s ease;
-  }
-  
-  body.light-mode {
-    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-    color: #1e293b;
-  }
-  
-  .theme-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    color: #f8fafc;
-    transition: all 0.3s ease;
-    z-index: 1000;
-  }
-  
-  body.light-mode .theme-toggle {
-    background: rgba(30, 41, 59, 0.1);
-    color: #1e293b;
-  }`;
-            
-            const darkModeJS = `
-    // Theme toggle functionality
-    const themeToggle = document.createElement('button');
-    themeToggle.className = 'theme-toggle';
-    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-    document.body.appendChild(themeToggle);
-    
-    // Check for saved theme preference
-    const currentTheme = localStorage.getItem('theme');
-    if (currentTheme === 'light') {
-      document.body.classList.add('light-mode');
-      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-    }
-    
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      if (document.body.classList.contains('light-mode')) {
-        localStorage.setItem('theme', 'light');
-        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-      } else {
-        localStorage.setItem('theme', 'dark');
-        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-      }
-    });`;
-            
-            // ... (other functions remain the same) ...
-
 // Add dark mode to code - PROPERLY FIXED
 function addDarkModeToCode() {
     const darkModeCSS = `
@@ -1387,7 +1472,6 @@ function addDarkModeToCode() {
 
     const currentCode = htmlEditor.value;
     
-    // Insert CSS properly
     let newCode = currentCode;
     if (!currentCode.includes('body.light-mode')) {
         const styleTagEnd = newCode.indexOf('</style>');
@@ -1398,7 +1482,6 @@ function addDarkModeToCode() {
         }
     }
 
-    // Insert JS properly
     if (!currentCode.includes('themeToggle')) {
         const scriptTagEnd = newCode.indexOf('</script>');
         if (scriptTagEnd !== -1) {
@@ -1414,84 +1497,52 @@ function addDarkModeToCode() {
     }
 }
 
-// Add responsive styles - PROPERLY FIXED
 function addResponsiveStyles() {
     const responsiveCode = `
     @media (max-width: 768px) {
       .features {
         grid-template-columns: 1fr;
       }
-      
-      h1 {
-        font-size: 2.5rem;
-      }
-      
-      header {
-        padding: 2rem 1rem;
-      }
-      
-      .feature-card {
-        padding: 1.5rem;
-      }
+      h1 { font-size: 2.5rem; }
+      header { padding: 2rem 1rem; }
+      .feature-card { padding: 1.5rem; }
     }
-    
     @media (max-width: 480px) {
-      h1 {
-        font-size: 2rem;
-      }
-      
-      .subtitle {
-        font-size: 1rem;
-      }
-      
-      .cta-button {
-        padding: 10px 20px;
-        font-size: 1rem;
-      }
+      h1 { font-size: 2rem; }
+      .subtitle { font-size: 1rem; }
+      .cta-button { padding: 10px 20px; font-size: 1rem; }
     }`;
-
     const currentCode = htmlEditor.value;
     if (!currentCode.includes('@media (max-width: 768px)')) {
         const styleTagEnd = currentCode.indexOf('</style>');
         if (styleTagEnd !== -1) {
-            const newCode = currentCode.substring(0, styleTagEnd) + 
-                          responsiveCode + 
-                          currentCode.substring(styleTagEnd);
-            htmlEditor.value = newCode;
+            htmlEditor.value = currentCode.substring(0, styleTagEnd) + responsiveCode + currentCode.substring(styleTagEnd);
             updatePreview();
         }
     }
 }
 
-// Add features section - PROPERLY FIXED
 function addFeaturesSection() {
     const newFeatureCard = `<div class="feature-card">
-        <div class="feature-icon">
-          <i class="fas fa-shield-alt"></i>
-        </div>
+        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
         <h3 class="feature-title">Secure & Reliable</h3>
         <p>Built with security best practices and reliable infrastructure.</p>
       </div>`;
-
     const currentCode = htmlEditor.value;
     if (!currentCode.includes('Secure & Reliable')) {
-        const featuresContainer = currentCode.indexOf('</div>', currentCode.indexOf('class="features"'));
-        if (featuresContainer !== -1) {
-            const newCode = currentCode.substring(0, featuresContainer) + 
-                          newFeatureCard + 
-                          currentCode.substring(featuresContainer);
-            htmlEditor.value = newCode;
+        const featuresContainerEnd = currentCode.indexOf('</div>', currentCode.indexOf('class="features"'));
+        if (featuresContainerEnd !== -1) {
+            htmlEditor.value = currentCode.substring(0, featuresContainerEnd) + newFeatureCard + currentCode.substring(featuresContainerEnd);
             updatePreview();
         }
     }
 }
 
-// Create database simulation - PROPERLY FIXED
 function createDatabase() {
     const dbCode = `
-  // Database connection example
+  // Database connection example (conceptual)
+  /*
   const { Pool } = require('pg');
-  
   const pool = new Pool({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -1499,7 +1550,6 @@ function createDatabase() {
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
   });
-  
   async function queryDatabase() {
     try {
       const res = await pool.query('SELECT * FROM users');
@@ -1509,108 +1559,183 @@ function createDatabase() {
       console.error('Database error:', err);
       throw err;
     }
-  }`;
-
+  }
+  */`;
     const currentCode = htmlEditor.value;
     if (!currentCode.includes('Database connection example')) {
         const scriptTagEnd = currentCode.indexOf('</script>');
         if (scriptTagEnd !== -1) {
-            const newCode = currentCode.substring(0, scriptTagEnd) + 
-                          dbCode + 
-                          currentCode.substring(scriptTagEnd);
-            htmlEditor.value = newCode;
+            htmlEditor.value = currentCode.substring(0, scriptTagEnd) + dbCode + currentCode.substring(scriptTagEnd);
             updatePreview();
         }
     }
 }
         
-        // Request API key simulation
-        function requestAPIKey() {
-            // Create input form for API key
-            const apiKeyMsg = document.createElement('div');
-            apiKeyMsg.className = 'message ai';
-            apiKeyMsg.innerHTML = `
-                <strong>AI Assistant:</strong> I need an API key to integrate with the weather service. Please enter it below:
-                <div class="api-key-input" style="margin-top: 10px; display: flex; gap: 10px;">
-                    <input type="text" id="api-key-input" placeholder="Enter API key..." style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #4361ee; background: rgba(15, 23, 42, 0.5); color: white;">
-                    <button id="submit-api-key" style="background: #4361ee; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Submit</button>
-                </div>
-                <div class="timestamp">Just now</div>
-            `;
-            chatMessages.appendChild(apiKeyMsg);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            // Add event listener for submit button
-            setTimeout(() => {
-                document.getElementById('submit-api-key').addEventListener('click', () => {
-                    const apiKey = document.getElementById('api-key-input').value;
-                    if (apiKey) {
-                        const successMsg = document.createElement('div');
-                        successMsg.className = 'message ai';
-                        successMsg.innerHTML = `
-                            <strong>AI Assistant:</strong> API key received! I've stored it securely in environment variables.
-                            <div class="timestamp">Just now</div>
-                        `;
-                        chatMessages.appendChild(successMsg);
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                        apiKeyMsg.style.display = 'none';
-                    }
-                });
-            }, 100);
-        }
-        
-        // Suggest deployment
-        function suggestDeployment() {
-            const deployMsg = document.createElement('div');
-            deployMsg.className = 'message ai';
-            deployMsg.innerHTML = `
-                <strong>AI Assistant:</strong> Your project is ready for deployment! 
-                <div style="margin-top: 10px;">
-                    <button id="deploy-btn" class="btn" style="background: #10b981; border-color: #10b981;">
-                        <i class="fas fa-rocket"></i> Deploy to Replit
-                    </button>
-                </div>
-                <div class="timestamp">Just now</div>
-            `;
-            chatMessages.appendChild(deployMsg);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            // Add event listener for deploy button
-            setTimeout(() => {
-                document.getElementById('deploy-btn').addEventListener('click', () => {
-                    deployMsg.innerHTML = `
-                        <strong>AI Assistant:</strong> Deployment initiated! Your website will be live shortly.
-                        <div class="timestamp">Just now</div>
-                    `;
+function requestAPIKey() {
+    const apiKeyMsg = document.createElement('div');
+    apiKeyMsg.className = 'message ai';
+    apiKeyMsg.innerHTML = `
+        <strong>AI Assistant:</strong> I need an API key to integrate with a service. Please enter it below:
+        <div class="api-key-input" style="margin-top: 10px; display: flex; gap: 10px;">
+            <input type="text" id="api-key-input" placeholder="Enter API key..." style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid var(--accent-primary); background: var(--bg-darker); color: var(--text-light);">
+            <button id="submit-api-key" style="background: var(--accent-primary); border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; color: var(--text-light);">Submit</button>
+        </div>
+        <div class="timestamp">Just now</div>`;
+    chatMessages.appendChild(apiKeyMsg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    setTimeout(() => {
+        const submitButton = document.getElementById('submit-api-key');
+        if (submitButton) {
+            submitButton.addEventListener('click', () => {
+                const apiKeyInput = document.getElementById('api-key-input');
+                if (apiKeyInput && apiKeyInput.value) {
+                    const successMsg = document.createElement('div');
+                    successMsg.className = 'message ai';
+                    successMsg.innerHTML = `<strong>AI Assistant:</strong> API key received! (Simulated storage).<div class="timestamp">Just now</div>`;
+                    chatMessages.appendChild(successMsg);
+                    apiKeyMsg.remove(); // Remove the input form
                     chatMessages.scrollTop = chatMessages.scrollHeight;
-                });
-            }, 100);
+                }
+            });
         }
+    }, 100);
+}
         
-        // Simulate file editing
-        function editFile() {
-            const editMsg = document.createElement('div');
-            editMsg.className = 'message ai';
-            editMsg.innerHTML = `
-                <strong>AI Assistant:</strong> I've made the requested changes to the file using the str_replace_editor tool.
-                <div class="tool-used"><i class="fas fa-tools"></i> Used: <span class="ai-tool">str_replace_editor</span></div>
-                <div class="timestamp">Just now</div>
-            `;
-            chatMessages.appendChild(editMsg);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            // Simulate a code change
-            const currentCode = htmlEditor.value;
-            if (!currentCode.includes('File edited by AI')) {
-                const comment = '\n    <!-- File edited by AI using str_replace_editor tool -->';
-                const containerPosition = currentCode.indexOf('<div class="container">');
-                const newCode = currentCode.substring(0, containerPosition + 23) + 
-                                comment + 
-                                currentCode.substring(containerPosition + 23);
-                htmlEditor.value = newCode;
-                updatePreview();
-            }
+function suggestDeployment() {
+    const deployMsg = document.createElement('div');
+    deployMsg.className = 'message ai';
+    deployMsg.innerHTML = `
+        <strong>AI Assistant:</strong> Your project looks ready for deployment! 
+        <div style="margin-top: 10px;">
+            <button id="deploy-btn-chat" class="btn" style="background: var(--success); border-color: var(--success); color: white;">
+                <i class="fas fa-rocket"></i> Deploy to Replit (Simulated)
+            </button>
+        </div>
+        <div class="timestamp">Just now</div>`;
+    chatMessages.appendChild(deployMsg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    setTimeout(() => {
+        const deployButton = document.getElementById('deploy-btn-chat');
+        if(deployButton) {
+            deployButton.addEventListener('click', () => {
+                deployMsg.innerHTML = `<strong>AI Assistant:</strong> Deployment process would be initiated via Replit's platform.<div class="timestamp">Just now</div>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
         }
+    }, 100);
+}
+        
+function editFile() {
+    const editMsg = document.createElement('div');
+    editMsg.className = 'message ai';
+    editMsg.innerHTML = `<strong>AI Assistant:</strong> I've made the requested file modifications using the \`str_replace_editor\` tool.
+        <div class="tool-used"><i class="fas fa-tools"></i> Used: <span class="ai-tool">str_replace_editor</span></div>
+        <div class="timestamp">Just now</div>`;
+    chatMessages.appendChild(editMsg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    const currentCode = htmlEditor.value;
+    if (!currentCode.includes('<!-- File edited by AI -->')) {
+        const comment = '\n    <!-- File edited by AI via str_replace_editor -->';
+        const containerEnd = currentCode.lastIndexOf('</div>');
+        if (containerEnd !== -1) {
+             htmlEditor.value = currentCode.substring(0, containerEnd) + comment + currentCode.substring(containerEnd);
+        } else {
+            htmlEditor.value += comment;
+        }
+        updatePreview();
+    }
+}
+
+function addContactFormToCode() {
+    const contactFormHTML = `
+    <section class="contact-form-section">
+      <h2>Contact Us</h2>
+      <form id="contactForm" class="contact-form">
+        <div class="form-group">
+          <label for="contactName">Name:</label>
+          <input type="text" id="contactName" name="contactName" required>
+        </div>
+        <div class="form-group">
+          <label for="contactEmail">Email:</label>
+          <input type="email" id="contactEmail" name="contactEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="contactMessage">Message:</label>
+          <textarea id="contactMessage" name="contactMessage" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-submit-form">Send Message</button>
+      </form>
+    </section>`;
+    const contactFormCSS = `
+    .contact-form-section { padding: 2rem 0; margin-top: 3rem; border-top: 1px solid rgba(224, 224, 224, 0.2); }
+    .contact-form-section h2 { text-align: center; margin-bottom: 2rem; color: var(--text-light); }
+    .contact-form { max-width: 600px; margin: 0 auto; background: var(--bg-medium); padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; color: var(--text-light); font-weight: 600; }
+    .form-group input[type="text"], .form-group input[type="email"], .form-group textarea { width: 100%; padding: 0.75rem; border-radius: 5px; border: 1px solid var(--bg-light-contrast); background: var(--bg-darker); color: var(--text-light); font-size: 1rem; }
+    .form-group input[type="text"]:focus, .form-group input[type="email"]:focus, .form-group textarea:focus { border-color: var(--accent-primary); outline: none; }
+    .btn-submit-form { background: var(--accent-primary); color: var(--text-light); display: block; width: 100%; padding: 0.75rem; font-size: 1.1rem; }
+    .btn-submit-form:hover { background: var(--accent-secondary); }`;
+
+    let currentCode = htmlEditor.value;
+    if (currentCode.includes('id="contactForm"')) {
+        console.log("Contact form already exists.");
+        const chatMessagesContainer = document.getElementById('chat-messages');
+        const alreadyExistsMsg = document.createElement('div');
+        alreadyExistsMsg.className = 'message ai';
+        alreadyExistsMsg.innerHTML = `<strong>AI Assistant:</strong> It looks like a contact form section already exists. I won't add another one.`;
+        chatMessagesContainer.appendChild(alreadyExistsMsg);
+        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        return;
+    }
+    const styleEnd = currentCode.indexOf('</style>');
+    if (styleEnd !== -1) {
+        currentCode = currentCode.substring(0, styleEnd) + contactFormCSS + currentCode.substring(styleEnd);
+    } else { currentCode += `<style>${contactFormCSS}</style>`; }
+
+    let insertPoint = -1;
+    const featuresDiv = currentCode.indexOf('<div class="features">');
+    if (featuresDiv !== -1) {
+        const endOfFeaturesOuterDiv = currentCode.indexOf('</div>', featuresDiv + '<div class="features">'.length);
+        if (endOfFeaturesOuterDiv !== -1) {
+             insertPoint = endOfFeaturesOuterDiv + '</div>'.length;
+        }
+    }
+    if (insertPoint === -1) { 
+        const containerEnd = currentCode.lastIndexOf('</div>', currentCode.indexOf('</body>'));
+        if (containerEnd !== -1 && currentCode.substring(containerEnd-20, containerEnd).includes("container")) { 
+           insertPoint = containerEnd + '</div>'.length;
+        }
+    }
+    if (insertPoint === -1 && currentCode.includes('</body>')) { insertPoint = currentCode.indexOf('</body>'); }
+    else if (insertPoint === -1) { insertPoint = currentCode.length; }
+    currentCode = currentCode.substring(0, insertPoint) + contactFormHTML + currentCode.substring(insertPoint);
+    htmlEditor.value = currentCode;
+    updatePreview();
+}
+
+function simulatePackageInstall(packageName) {
+    if (!packageName) { packageName = "a requested package"; }
+    console.log(`Simulating: packager_tool installed ${packageName}`);
+    const comment = `\n<!-- Simulated package install: ${packageName} (using packager_tool) -->`;
+    let currentCode = htmlEditor.value;
+    let insertPosition = currentCode.indexOf('</head>');
+    if (insertPosition === -1) { insertPosition = currentCode.length; }
+    const newCode = currentCode.substring(0, insertPosition) + comment + currentCode.substring(insertPosition);
+    if (htmlEditor.value !== newCode) {
+        htmlEditor.value = newCode;
+        updatePreview();
+    }
+    const chatMessagesContainer = document.getElementById('chat-messages');
+    const simMsg = document.createElement('div');
+    simMsg.className = 'message ai'; 
+    simMsg.innerHTML = `<strong>AI Assistant (System):</strong> Simulated installation of '${packageName}' using packager_tool. A comment has been added to the HTML.`;
+    chatMessagesContainer.appendChild(simMsg);
+    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+}
         
         // Event listeners for chat
         chatInput.addEventListener('keypress', (e) => {
@@ -1621,8 +1746,161 @@ function createDatabase() {
         
         sendBtn.addEventListener('click', sendMessage);
         
-        // Initial focus on chat input
+        // Layout Picker Functionality
+        const layoutButtons = document.querySelectorAll('.layout-btn');
+        const editorArea = document.querySelector('.editor-area');
+
+        layoutButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                layoutButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                const layout = button.getAttribute('data-layout');
+                editorArea.classList.remove('layout-default', 'layout-preview-top', 'layout-editor-top');
+                if (layout !== 'default') { 
+                    editorArea.classList.add(`layout-${layout}`);
+                }
+            });
+        });
+
+        // Initialize: Load AI config, then focus chat input.
+        const initialToolsJson = `{
+  "tools": [
+    {
+      "name": "restart_workflow",
+      "description": "Restart (or start) a workflow.",
+      "parameters": { "properties": { "name": { "description": "The name of the workflow.", "type": "string" } }, "required": ["name"], "type": "object" }
+    },
+    {
+      "name": "search_filesystem",
+      "description": "This tools searches and opens the relevant files for a codebase",
+      "parameters": { "properties": { "class_names": { "default": [], "description": "List of specific class names to search for in the codebase. Case-sensitive and supports exact matches only. Use this to find particular class definitions or their usages.", "items": {"type": "string"}, "type": "array" }, "code": { "default": [], "description": "List of exact code snippets to search for in the codebase. Useful for finding specific implementations or patterns. Each snippet should be a complete code fragment, not just keywords.", "items": {"type": "string"}, "type": "array" }, "function_names": { "default": [], "description": "List of specific function or method names to search for. Case-sensitive and supports exact matches only. Use this to locate function definitions or their invocations throughout the code.", "items": {"type": "string"}, "type": "array" }, "query_description": { "anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "description": "A natural language query to perform semantic similarity search. Describe what you're looking for using plain English, e.g. 'find error handling in database connections' or 'locate authentication middleware implementations'." } }, "type": "object" }
+    },
+    {
+      "name": "packager_tool",
+      "description": "Installs the language (if needed) and installs or uninstalls a list of libraries or project dependencies. Use this tool to install dependencies instead of executing shell commands, or editing files manually. Use this tool with language_or_system=\`system\` to add system-dependencies instead of using \`apt install\`. Installing libraries for the first time also creates the necessary project files automatically (like 'package.json', 'cargo.toml', etc). This will automatically reboot all workflows.",
+      "parameters": { "properties": { "dependency_list": { "default": [], "description": "The list of system dependencies or libraries to install. System dependencies are packages (attribute paths) in the Nixpkgs package collection. Example system dependencies: ['jq', 'ffmpeg', 'imagemagick']. Libraries are packages for a particular programming language. Example libraries: ['express'], ['lodash'].", "items": {"type": "string"}, "type": "array" }, "install_or_uninstall": { "description": "Whether to install or uninstall.", "enum": ["install", "uninstall"], "type": "string" }, "language_or_system": { "description": "The language for which to install/uninstall libraries, for example  'nodejs', 'bun', 'python', etc. Use \`system\` to install/uninstall system dependencies.", "type": "string" } }, "required": ["install_or_uninstall", "language_or_system"], "type": "object" }
+    },
+    {
+      "name": "programming_language_install_tool",
+      "description": "If a program doesn't run, you may not have the programming language installed. Use programming_language_install_tool to install it. If you need to use python, include 'python-3.11' in programming_languages. For Python 3.10, use 'python-3.10'. If you need to use Node.js, include 'nodejs-20' in programming_languages. For Node.js 18, use 'nodejs-18'. Note, this will also install the language's package manager, so don't install it separately.",
+      "parameters": { "properties": { "programming_languages": { "description": "IDs of the programming languages to install", "items": {"type": "string"}, "type": "array" } }, "required": ["programming_languages"], "type": "object" }
+    },
+    {
+      "name": "create_postgresql_database_tool",
+      "description": "When a project requires a PostgreSQL database, you can use this tool to create a database for it. After successfully creating a database, you will have access to the following environment variables: DATABASE_URL, PGPORT, PGUSER, PGPASSWORD, PGDATABASE, PGHOST\\nYou can use these environment variables to connect to the database in your project.",
+      "parameters": { "properties": {}, "type": "object" }
+    },
+    {
+      "name": "check_database_status",
+      "description": "Check if given databases are available and accessible.\\nThis tool is used to verify the connection and status of specified databases.",
+      "parameters": { "properties": {}, "type": "object" }
+    },
+    {
+      "name": "str_replace_editor",
+      "description": "Custom editing tool for viewing, creating and editing files\\n* State is persistent across command calls and discussions with the user\\n* If \`path\` is a file, \`view\` displays the result of applying \`cat -n\`. If \`path\` is a directory, \`view\` lists non-hidden files and directories up to 2 levels deep\\n* The \`create\` command cannot be used if the specified \`path\` already exists as a file\\n* If a \`command\` generates a long output, it will be truncated and marked with \`<response clipped>\` \\n* The \`undo_edit\` command will revert the last edit made to the file at \`path\`\\n\\nNotes for using the \`str_replace\` command:\\n* The \`old_str\` parameter should match EXACTLY one or more consecutive lines from the original file. Be mindful of whitespaces!\\n* If the \`old_str\` parameter is not unique in the file, the replacement will not be performed. Make sure to include enough context in \`old_str\` to make it unique\\n* The \`new_str\` parameter should contain the edited lines that should replace the \`old_str\`",
+      "parameters": { "properties": { "command": { "description": "The commands to run. Allowed options are: \`view\`, \`create\`, \`str_replace\`, \`insert\`, \`undo_edit\`.", "enum": ["view", "create", "str_replace", "insert", "undo_edit"], "type": "string" }, "file_text": { "description": "Required parameter of \`create\` command, with the content of the file to be created.", "type": "string" }, "insert_line": { "description": "Required parameter of \`insert\` command. The \`new_str\` will be inserted AFTER the line \`insert_line\` of \`path\`.", "type": "integer" }, "new_str": { "description": "Optional parameter of \`str_replace\` command containing the new string (if not given, no string will be added). Required parameter of \`insert\` command containing the string to insert.", "type": "string" }, "old_str": { "description": "Required parameter of \`str_replace\` command containing the string in \`path\` to replace.", "type": "string" }, "path": { "description": "Absolute path to file or directory, e.g. \`/repo/file.py\` or \`/repo\`.", "type": "string" }, "view_range": { "description": "Optional parameter of \`view\` command when \`path\` points to a file. If none is given, the full file is shown. If provided, the file will be shown in the indicated line number range, e.g. [11, 12] will show lines 11 and 12. Indexing at 1 to start. Setting \`[start_line, -1]\` shows all lines from \`start_line\` to the end of the file.", "items": {"type": "integer"}, "type": "array" } }, "required": ["command", "path"], "type": "object" }
+    },
+    {
+      "name": "bash",
+      "description": "Run commands in a bash shell\\n* When invoking this tool, the contents of the \\"command\\" parameter does NOT need to be XML-escaped.\\n* You have access to a mirror of common linux and python packages via apt and pip.\\n* State is persistent across command calls and discussions with the user.\\n* To inspect a particular line range of a file, e.g. lines 10-25, try 'sed -n 10,25p /path/to/the/file'.\\n* Please avoid commands that may produce a very large amount of output.\\n* Please run long lived commands in the background, e.g. 'sleep 10 &' or start a server in the background.",
+      "parameters": { "properties": { "command": { "description": "The bash command to run. Required unless the tool is being restarted.", "type": "string" }, "restart": { "description": "Specifying true will restart this tool. Otherwise, leave this unspecified.", "type": "boolean" } }, "type": "object" }
+    },
+    {
+      "name": "workflows_set_run_config_tool",
+      "description": "Configure a background task that executes a shell command.\\nThis is useful for starting development servers, build processes, or any other\\nlong-running tasks needed for the project.\\nIf this is a server, ensure you specify the port number it listens on in the \`wait_for_port\` field so\\nthe workflow isn't considered started until the server is ready to accept connections.\\n\\nExamples:\\n- For a Node.js server: set \`name\` to 'Server', \`command\` to 'npm run dev', and \`wait_for_port\` to 5000\\n- For a Python script: set name to 'Data Processing' and command to 'python process_data.py'\\n\\nMultiple tasks can be configured and they will all execute in parallel when the project is started.\\nAfter configuring a task, it will automatically start executing in the background.\\n\\nALWAYS serve the app on port 5000, even if there are problems serving that port: it is the only port that is not firewalled.\\n",
+      "parameters": { "properties": { "command": { "description": "The shell command to execute. This will run in the background when the project is started.", "type": "string" }, "name": { "description": "A unique name to identify the command. This will be used to keep a track of the command.", "type": "string" }, "wait_for_port": { "anyOf": [{"type": "integer"}, {"type": "null"}], "default": null, "description": "If the command starts a process that listens on a port, specify the port number here.\\nThis allows the system to wait for the port to be ready before considering the command fully started." } }, "required": ["name", "command"], "type": "object" }
+    },
+    {
+      "name": "workflows_remove_run_config_tool",
+      "description": "Remove previously added named command",
+      "parameters": { "properties": { "name": { "description": "The name of the command to remove.", "type": "string" } }, "required": ["name"], "type": "object" }
+    },
+    {
+      "name": "execute_sql_tool",
+      "description": "This tool allows you to execute SQL queries, fix database errors and access the database schema.\\n\\n## Rules of usage:\\n1. Always prefer using this tool to fix database errors vs fixing by writing code like db.drop_table(table_name)\\n2. Provide clear, well-formatted SQL queries with proper syntax\\n3. Focus on database interactions, data manipulation, and query optimization\\n\\n## When to use:\\n1. To fix and troubleshoot database-related issues\\n2. To explore database schema and relationships\\n3. To update or modify data in the database\\n4. To run ad-hoc single-use SQL code\\n\\n## When not to use:\\n1. For non-SQL database operations (NoSQL, file-based databases)\\n2. For database migrations. Use a migration tool like Drizzle or flask-migrate instead\\n\\n## Example usage:\\n\\n### Example 1: Viewing database information\\nsql_query: SELECT * FROM customers WHERE region = 'North';\\n\\n### Example 2: Running ad-hoc SQL queries\\nsql_query:  EXPLAIN ANALYZE SELECT orders.*, customers.name\\n            FROM orders\\n            JOIN customers ON orders.customer_id = customers.id;\\n\\n### Example 3: Inserting data into the database\\nsql_query:  INSERT INTO products (name, price, category)\\n            VALUES ('New Product', 29.99, 'Electronics');",
+      "parameters": { "properties": { "sql_query": { "description": "The SQL query to be executed", "type": "string" } }, "required": ["sql_query"], "type": "object" }
+    },
+    {
+      "name": "suggest_deploy",
+      "description": "Call this function when you think the project is in a state ready for deployment.\\nThis will suggest to the user that they can deploy their project.\\nThis is a terminal action - once called, your task is complete and\\nyou should not take any further actions to verify the deployment.\\nThe deployment process will be handled automatically by Replit Deployments.\\n\\n## Rules of usage:\\n1. Use this tool once you've validated that the project works as expected.\\n2. The deployment process will be handled automatically by Replit Deployments.\\n\\n## When to use:\\n1. When the project is ready for deployment.\\n2. When the user asks to deploy the project.\\n\\n## More information:\\n- The user needs to manually initiate the deployment.\\n- Replit Deployments will handle building the application, hosting, TLS, health checks.\\n- Once this tool is called, there is no need to do any follow up steps or verification.\\n- Once deployed, the app will be available under a \`.replit.app\` domain,\\n  or a custom domain if one is configured.",
+      "parameters": { "description": "Empty parameters class since suggest deploy doesn't need any parameters.", "properties": {}, "type": "object" }
+    },
+    {
+      "name": "report_progress",
+      "description": "Call this function once the user explicitly confirms that a major feature or task is complete.\\nDo not call it without the user's confirmation.\\nProvide a concise summary of what was accomplished in the 'summary' field.\\nThis tool will ask user for the next thing to do. Don't do anything after this tool.",
+      "parameters": { "properties": { "summary": { "description": "Summarize your recent changes in a maximum of 5 items. Be really concise, use no more than 30 words. Break things into multiple lines.\\nPut a \\u2713 before every item you've done recently and \\u2192 for the items in progress, be very short and concise, don't use more than 50 words. Don't use emojis.\\nUse simple, everyday language that matches the user's language. Avoid technical terms, as users are non-technical.\\nAsk user what to do next in the end.", "type": "string" } }, "required": ["summary"], "type": "object" }
+    },
+    {
+      "name": "web_application_feedback_tool",
+      "description": "This tool captures a screenshot and checks logs to verify whether the web application is running in the Replit workflow.\\n\\nIf the application is running, the tool displays the app, asks user a question, and waits for user's response.\\nUse this tool when the application is in a good state and the requested task is complete to avoid unnecessary delays.",
+      "parameters": { "properties": { "query": { "description": "The question you will ask the user.\\n\\nUse simple, everyday language that matches the user's language. Avoid technical terms, as users are non-technical.\\nSummarize your recent changes in a maximum of 5 items. Be really concise, use no more than 30 words. Break things into multiple lines.\\nPut a \\u2713 before every item you've done recently and \\u2192 for the items in progress, be very short and concise, don't use more than 50 words. Don't use emojis.\\nLimit yourself to asking only one question at a time.\\nYou have access to workflow state, console logs, and screenshots\\u2014retrieve them yourself instead of asking the user.\\nAsk for user input or confirmation on next steps. Do not request details.", "type": "string" }, "website_route": { "anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "description": "The specific route or path of the website you're asking about, if it's different from the root URL ('/'). Include the leading slash. Example: '/dashboard' or '/products/list'" }, "workflow_name": { "description": "The name of the workflow running the server. Used to determine the port of the website.", "type": "string" } }, "required": ["query", "workflow_name"], "type": "object" }
+    },
+    {
+      "name": "shell_command_application_feedback_tool",
+      "description": "This tool allows you to execute interactive shell commands and ask questions about the output or behavior of CLI applications or interactive Python programs.\\n\\n## Rules of usage:\\n1. Provide clear, concise interactive commands to execute and specific questions about the results or interaction.\\n2. Ask one question at a time about the interactive behavior or output.\\n3. Focus on interactive functionality, user input/output, and real-time behavior.\\n4. Specify the exact command to run, including any necessary arguments or flags to start the interactive session.\\n5. When asking about Python programs, include the file name and any required command-line arguments to start the interactive mode.\\n\\n## When to use:\\n1. To test and verify the functionality of interactive CLI applications or Python programs where user input and real-time interaction are required.\\n2. To check if a program responds correctly to user input in an interactive shell environment.\\n\\n## When not to use:\\n1. For non-interactive commands or scripts that don't require user input.\\n2. For API testing or web-based interactions.\\n3. For shell commands that open a native desktop VNC window.\\n\\n## Example usage:\\nCommand: python interactive_script.py\\nQuestion: When prompted, can you enter your name and receive a personalized greeting?\\n\\nCommand: ./text_adventure_game\\nQuestion: Are you able to make choices that affect the story progression?\\n\\nCommand: python -i data_analysis.py\\nQuestion: Can you interactively query and manipulate the loaded data set?",
+      "parameters": { "properties": { "query": { "description": "The question or feedback request about the shell application", "type": "string" }, "shell_command": { "description": "The shell command to be executed before asking for feedback", "type": "string" }, "workflow_name": { "description": "The workflow name for this command, must be an existing workflow.", "type": "string" } }, "required": ["query", "shell_command", "workflow_name"], "type": "object" }
+    },
+    {
+      "name": "vnc_window_application_feedback",
+      "description": "This tool allows you to execute interactive desktop application, which will be accessed through VNC and displayed to the user.\\nYou can ask questions about the output or behavior of this application.\\n\\n## Rules of usage:\\n1. Provide clear, concise command to execute the application, and specific questions about the results or interaction.\\n2. Ask one question at a time about the interactive behavior or output.\\n3. Focus on interactive functionality, user input/output, and real-time behavior.\\n4. Specify the exact command to run, including any necessary arguments or flags.\\n\\n## When to use:\\n1. To test and verify the functionality of interactive desktop programs, where user input and real-time interactions are required.\\n2. To check if a program responds correctly to user input in an attached VNC window.\\n\\n## When not to use:\\n1. For non-interactive commands or scripts that don't require user input.\\n2. For API testing or web-based interactions.\\n3. For shell commands that don't open a native desktop VNC window.\\n\\n## Example usage:\\nCommand: python pygame_snake.py\\nQuestion: Do the keyboard events change the snake direction on the screen?\\n\\nCommand: ./opencv_face_detection\\nQuestion: Do you see a photo with green rectangles around detected faces?",
+      "parameters": { "properties": { "query": { "description": "The question or feedback request about a native window application, visible through VNC", "type": "string" }, "vnc_execution_command": { "description": "The VNC shell command to be executed before asking for feedback; this shell command should spawn the desktop window", "type": "string" }, "workflow_name": { "description": "The workflow name for this VNC shell command, must be an existing workflow.", "type": "string" } }, "required": ["query", "vnc_execution_command", "workflow_name"], "type": "object" }
+    },
+    {
+      "name": "ask_secrets",
+      "description": "Ask user for the secret API keys needed for the project.\\nIf a secret is missing, use this tool as soon as possible.\\nThe secrets will be added to environment variables.\\nThis tool is very expensive to run.\\n\\nGOOD Examples:\\n- To set up secure payments with Stripe, we need a STRIPE_SECRET_KEY.\\n  This key will be used to securely process payments and\\n  manage subscriptions in your application.\\n- To enable SMS price alerts, we need Twilio API credentials TWILIO_ACCOUNT_SID,\\n  TWILIO_AUTH_TOKEN, and TWILIO_PHONE_NUMBER. These will be used to send SMS\\n  notifications when price targets are reached.\\n- To build applications using OpenAI models we need an OPENAI_API_KEY.\\n\\nBAD Examples (Do Not Use):\\n- PHONE_NUMBER, EMAIL_ADDRESS, or PASSWORD\\n    for this type of variables, you should ask the user directly\\n    through the user_response tool.\\n- REPLIT_DOMAINS or REPL_ID\\n    these secrets are always present, so you never need to ask for\\n    them.\\n",
+      "parameters": { "properties": { "secret_keys": { "description": "Array of secret key identifiers needed for the project (e.g., [\\"OPENAI_API_KEY\\", \\"GITHUB_TOKEN\\"])", "items": {"type": "string"}, "type": "array" }, "user_message": { "description": "The message to send back to the user explaining the reason for needing these secret keys. If you haven't already, briefly introduce what a secret key is in general terms, assume the user never registered for an API key before. Please phrase your question respectfully.", "type": "string" } }, "required": ["secret_keys", "user_message"], "type": "object" }
+    },
+    {
+      "name": "check_secrets",
+      "description": "Check if a given secret exists in the environment.\\nThis tool is used to verify the presence of a secret without exposing its actual value.\\n",
+      "parameters": { "properties": { "secret_keys": { "description": "The secret keys to check in the environment.", "items": {"type": "string"}, "type": "array" } }, "required": ["secret_keys"], "type": "object" }
+    }
+  ],
+  "internal_tags": [
+    { "name": "View", "description": "Contains file system information and repository details" },
+    { "name": "policy_spec", "description": "Contains communication, proactiveness and data integrity policies" },
+    { "name": "file_system", "description": "Shows directory structure" },
+    { "name": "repo_overview", "description": "Contains code summaries" },
+    { "name": "important", "description": "Contains key policy reminders" },
+    { "name": "workflow_console_logs", "description": "Contains logs from running workflows" },
+    { "name": "automatic_updates", "description": "Contains system-generated updates" },
+    { "name": "webview_console_logs", "description": "Contains logs from the user's browser" },
+    { "name": "function_results", "description": "Contains results of function/tool calls" }
+  ]
+}`;
+        loadReplitAiConfig(initialToolsJson); // Load the new full JSON
+        document.getElementById('json-tools').textContent = JSON.stringify(JSON.parse(initialToolsJson), null, 2); // Update display
         chatInput.focus();
+        console.log("AI Config loaded from full JSON string, chat focused, JSON tab updated.");
+        
+
+        // Contact Form Submission Handler (Client-side)
+        document.body.addEventListener('submit', function(event) {
+            if (event.target.id === 'contactForm') {
+                event.preventDefault(); 
+
+                const existingSuccessMsg = document.getElementById('contactFormSuccessMsg');
+                if (existingSuccessMsg) {
+                    existingSuccessMsg.remove();
+                }
+
+                const successMsg = document.createElement('p');
+                successMsg.id = 'contactFormSuccessMsg';
+                successMsg.textContent = 'Message sent successfully! (This is a demo - no actual email was sent.)';
+                successMsg.style.color = 'var(--success)'; 
+                successMsg.style.marginTop = '1rem';
+                successMsg.style.textAlign = 'center'; 
+                
+                const formParent = event.target.parentNode;
+                if (formParent) {
+                    formParent.appendChild(successMsg);
+                } else { 
+                    event.target.insertAdjacentElement('afterend', successMsg);
+                }
+                
+                event.target.reset(); 
+            }
+        });
     </script>
 </body>
 </html>
