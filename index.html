@@ -1,1 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replit AI Web Creator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --dark: #0f172a;
+            --darker: #0a0f1f;
+            --light: #f8f9fa;
+            --sidebar: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --code-bg: #1e1e1e;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            height: 60px;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo i {
+            color: var(--accent);
+            font-size: 24px;
+        }
+        
+        .logo h1 {
+            font-size: 22px;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+        
+        .header-controls {
+            margin-left: auto;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            background: rgba(67, 97, 238, 0.2);
+            border: 1px solid var(--primary);
+            color: var(--light);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn i {
+            font-size: 14px;
+        }
+        
+        .btn-run {
+            background: var(--success);
+            border-color: var(--success);
+        }
+        
+        .btn-run:hover {
+            background: #059669;
+        }
+        
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        aside {
+            width: 350px;
+            background: var(--sidebar);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: transparent;
+            border: none;
+            color: var(--light);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .tab-btn.active {
+            background: rgba(67, 97, 238, 0.2);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tab-pane {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+        }
+        
+        .tab-pane.active {
+            display: flex;
+        }
+        
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .message.user {
+            background: rgba(67, 97, 238, 0.3);
+            border: 1px solid var(--primary);
+            align-self: flex-end;
+        }
+        
+        .message.ai {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
+        }
+        
+        .message.thinking {
+            color: #94a3b8;
+            font-style: italic;
+            background: rgba(30, 41, 59, 0.5);
+        }
+        
+        .message .timestamp {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.5);
+            color: var(--light);
+            outline: none;
+            transition: border 0.3s ease;
+        }
+        
+        .chat-input input:focus {
+            border-color: var(--accent);
+        }
+        
+        .chat-input button {
+            background: var(--primary);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-input button:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+        
+        .rules-container, .json-container {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .rules-container h3, .json-container h3 {
+            margin-bottom: 15px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .rules-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--primary);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .rules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .rule-item {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+            transition: transform 0.2s ease;
+        }
+        
+        .rule-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .rule-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--accent);
+        }
+        
+        pre {
+            background: var(--code-bg);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+            max-height: 500px;
+        }
+        
+        .editor-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .editor-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.8);
+        }
+        
+        .editor-header h2 {
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .editor-header i {
+            color: var(--accent);
+        }
+        
+        .editor-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .editor-panel, .preview-panel {
+            flex: 1;
+            background: rgba(30, 41, 59, 0.8);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .panel-header {
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .panel-header h3 {
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .panel-header i {
+            color: var(--accent);
+            font-size: 14px;
+        }
+        
+        .panel-content {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .code-editor {
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            background: var(--code-bg);
+            color: #f8f8f2;
+            border: none;
+            outline: none;
+            resize: none;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .preview-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            aside {
+                width: 300px;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            aside {
+                width: 100%;
+                height: 300px;
+            }
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .ai-typing-indicator {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .ai-typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: inline-block;
+            animation: bounce 1.5s infinite ease-in-out both;
+        }
+        
+        .ai-typing-indicator span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+        
+        .ai-typing-indicator span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { 
+                transform: scale(0);
+            }
+            40% { 
+                transform: scale(1.0);
+            }
+        }
+        
+        .tool-tag {
+            display: inline-block;
+            background: rgba(76, 201, 240, 0.2);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 5px;
+        }
+        
+        .tool-used {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+        
+        .tool-used i {
+            margin-right: 5px;
+            color: var(--accent);
+        }
+        
+        .ai-tool {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-robot"></i>
+            <h1>Replit AI Web Creator</h1>
+        </div>
+        <div class="header-controls">
+            <button class="btn" id="save-btn">
+                <i class="fas fa-save"></i> Save
+            </button>
+            <button class="btn btn-run" id="run-btn">
+                <i class="fas fa-play"></i> Run
+            </button>
+        </div>
+    </header>
+    
+    <div class="main-container">
+        <aside>
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="chat">AI Chat</button>
+                <button class="tab-btn" data-tab="rules">Rules</button>
+                <button class="tab-btn" data-tab="json">JSON Tools</button>
+            </div>
+            
+            <div class="tab-content">
+                <div class="tab-pane active" id="chat-tab">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="message ai">
+                                <strong>AI Assistant:</strong> Hello! I'm your Replit AI assistant. I'm here to help you build software with minimal back-and-forth. How can I assist you today?
+                                <div class="timestamp">Just now</div>
+                            </div>
+                            <div class="message user">
+                                Create a responsive website with a hero section and features
+                                <div class="timestamp">Just now</div>
+                            </div>
+                            <div class="message ai">
+                                <strong>AI Assistant:</strong> I've created a responsive homepage with a hero section and three feature cards. The design is mobile-friendly and uses modern CSS techniques. You can see it in the preview panel.
+                                <div class="tool-used"><i class="fas fa-tools"></i> Used: <span class="ai-tool">str_replace_editor</span>, <span class="ai-tool">restart_workflow</span></div>
+                                <div class="timestamp">Just now</div>
+                            </div>
+                            <div class="message user">
+                                Can you add a dark mode toggle?
+                                <div class="timestamp">Just now</div>
+                            </div>
+                            <div class="message ai">
+                                <strong>AI Assistant:</strong> Dark mode toggle added! I've implemented a theme switcher that saves user preference to localStorage. Check the code editor for the implementation.
+                                <div class="tool-used"><i class="fas fa-tools"></i> Used: <span class="ai-tool">str_replace_editor</span>, <span class="ai-tool">bash</span></div>
+                                <div class="timestamp">Just now</div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input">
+                            <input type="text" id="chat-input" placeholder="Ask the AI assistant...">
+                            <button id="send-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane" id="rules-tab">
+                    <div class="rules-container">
+                        <h3><i class="fas fa-book"></i> AI Operational Rules</h3>
+                        
+                        <div class="rules-section">
+                            <div class="section-title"><i class="fas fa-user-tie"></i> Role: Expert Software Developer (Editor)</div>
+                            <div class="rules-list">
+                                <div class="rule-item">
+                                    <div class="rule-title">Primary Focus</div>
+                                    <div>Build software on Replit for the user with minimal back-and-forth</div>
+                                </div>
+                                <div class="rule-item">
+                                    <div class="rule-title">Iteration Process</div>
+                                    <div>Iterate back and forth with the user on their request. Report progress using the appropriate tool.</div>
+                                </div>
+                                <div class="rule-item">
+                                    <div class="rule-title">Communication Policy</div>
+                                    <div>Use plain language, avoid jargon, and explain complex concepts when necessary</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="rules-section">
+                            <div class="section-title"><i class="fas fa-cogs"></i> Operating Principles</div>
+                            <div class="rules-list">
+                                <div class="rule-item">
+                                    <div class="rule-title">Prioritize Replit Tools</div>
+                                    <div>Avoid virtual environments, Docker, or containerization</div>
+                                </div>
+                                <div class="rule-item">
+                                    <div class="rule-title">App Functionality</div>
+                                    <div>After changes, check app functionality using feedback tools</div>
+                                </div>
+                                <div class="rule-item">
+                                    <div class="rule-title">File Operations</div>
+                                    <div>Use search_filesystem tool to locate files and directories</div>
+                                </div>
+                                <div class="rule-item">
+                                    <div class="rule-title">Database Operations</div>
+                                    <div>Use execute sql tool for debugging PostgreSQL database errors</div>
+                                </div>
+                                <div class="rule-item">
+                                    <div class="rule-title">Proactiveness</div>
+                                    <div>Suggest improvements and anticipate user needs without explicit requests</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="rules-section">
+                            <div class="section-title"><i class="fas fa-shield-alt"></i> Data Integrity Policy</div>
+                            <div class="rules-list">
+                                <div class="rule-item">
+                                    <div class="rule-title">Data Accuracy</div>
+                                    <div>Ensure all data used is accurate, complete, and from authentic sources</div>
+                                </div>
+                                <div class="rule-item">
+                                    <div class="rule-title">Error Handling</div>
+                                    <div>Implement robust error handling to prevent data corruption</div>
+                                </div>
+                                <div class="rule-item">
+                                    <div class="rule-title">Validation</div>
+                                    <div>Validate user inputs and data from external sources</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane" id="json-tab">
+                    <div class="json-container">
+                        <h3><i class="fas fa-tools"></i> AI Tools Configuration</h3>
+                        <pre id="json-tools">{
+  "tools": [
+    {
+      "name": "restart_workflow",
+      "description": "Restart (or start) a workflow.",
+      "parameters": {
+        "properties": {
+          "name": {
+            "description": "The name of the workflow.",
+            "type": "string"
+          }
+        },
+        "required": ["name"],
+        "type": "object"
+      }
+    },
+    {
+      "name": "search_filesystem",
+      "description": "This tools searches and opens the relevant files for a codebase",
+      "parameters": {
+        "properties": {
+          "class_names": {
+            "default": [],
+            "description": "List of specific class names to search for in the codebase. Case-sensitive and supports exact matches only. Use this to find particular class definitions or their usages.",
+            "items": {"type": "string"},
+            "type": "array"
+          },
+          "code": {
+            "default": [],
+            "description": "List of exact code snippets to search for in the codebase. Useful for finding specific implementations or patterns. Each snippet should be a complete code fragment, not just keywords.",
+            "items": {"type": "string"},
+            "type": "array"
+          },
+          "function_names": {
+            "default": [],
+            "description": "List of specific function or method names to search for. Case-sensitive and supports exact matches only. Use this to locate function definitions or their invocations throughout the code.",
+            "items": {"type": "string"},
+            "type": "array"
+          },
+          "query_description": {
+            "anyOf": [{"type": "string"}, {"type": "null"}],
+            "default": null,
+            "description": "A natural language query to perform semantic similarity search. Describe what you're looking for using plain English, e.g. 'find error handling in database connections' or 'locate authentication middleware implementations'."
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "name": "str_replace_editor",
+      "description": "Custom editing tool for viewing, creating and editing files\n* State is persistent across command calls and discussions with the user\n* If `path` is a file, `view` displays the result of applying `cat -n`. If `path` is a directory, `view` lists non-hidden files and directories up to 2 levels deep\n* The `create` command cannot be used if the specified `path` already exists as a file\n* If a `command` generates a long output, it will be truncated and marked with `<response clipped>` \n* The `undo_edit` command will revert the last edit made to the file at `path`",
+      "parameters": {
+        "properties": {
+          "command": {
+            "description": "The commands to run. Allowed options are: `view`, `create`, `str_replace`, `insert`, `undo_edit`.",
+            "enum": ["view", "create", "str_replace", "insert", "undo_edit"],
+            "type": "string"
+          },
+          "file_text": {
+            "description": "Required parameter of `create` command, with the content of the file to be created.",
+            "type": "string"
+          },
+          "insert_line": {
+            "description": "Required parameter of `insert` command. The `new_str` will be inserted AFTER the line `insert_line` of `path`.",
+            "type": "integer"
+          },
+          "new_str": {
+            "description": "Optional parameter of `str_replace` command containing the new string (if not given, no string will be added). Required parameter of `insert` command containing the string to insert.",
+            "type": "string"
+          },
+          "old_str": {
+            "description": "Required parameter of `str_replace` command containing the string in `path` to replace.",
+            "type": "string"
+          },
+          "path": {
+            "description": "Absolute path to file or directory, e.g. `/repo/file.py` or `/repo`.",
+            "type": "string"
+          },
+          "view_range": {
+            "description": "Optional parameter of `view` command when `path` points to a file. If none is given, the full file is shown. If provided, the file will be shown in the indicated line number range, e.g. [11, 12] will show lines 11 and 12. Indexing at 1 to start. Setting `[start_line, -1]` shows all lines from `start_line` to the end of the file.",
+            "items": {"type": "integer"},
+            "type": "array"
+          }
+        },
+        "required": ["command", "path"],
+        "type": "object"
+      }
+    },
+    {
+      "name": "bash",
+      "description": "Run commands in a bash shell\n* When invoking this tool, the contents of the \"command\" parameter does NOT need to be XML-escaped.\n* You have access to a mirror of common linux and python packages via apt and pip.\n* State is persistent across command calls and discussions with the user.\n* To inspect a particular line range of a file, e.g. lines 10-25, try 'sed -n 10,25p /path/to/the/file'.\n* Please avoid commands that may produce a very large amount of output.\n* Please run long lived commands in the background, e.g. 'sleep 10 &' or start a server in the background.",
+      "parameters": {
+        "properties": {
+          "command": {
+            "description": "The bash command to run. Required unless the tool is being restarted.",
+            "type": "string"
+          },
+          "restart": {
+            "description": "Specifying true will restart this tool. Otherwise, leave this unspecified.",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "name": "create_postgresql_database_tool",
+      "description": "Create a PostgreSQL database and set up environment variables",
+      "parameters": {
+        "properties": {
+          "db_name": {
+            "description": "Name of the database to create",
+            "type": "string"
+          }
+        },
+        "required": ["db_name"],
+        "type": "object"
+      }
+    },
+    {
+      "name": "suggest_deploy",
+      "description": "Suggest deployment of the current project",
+      "parameters": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "execute_sql",
+      "description": "Execute SQL commands on a PostgreSQL database",
+      "parameters": {
+        "properties": {
+          "query": {
+            "description": "SQL query to execute",
+            "type": "string"
+          }
+        },
+        "required": ["query"],
+        "type": "object"
+      }
+    },
+    {
+      "name": "ask_secrets",
+      "description": "Request API keys or other secrets from the user",
+      "parameters": {
+        "properties": {
+          "secret_name": {
+            "description": "Name of the secret being requested",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Reason for needing the secret",
+            "type": "string"
+          }
+        },
+        "required": ["secret_name", "reason"],
+        "type": "object"
+      }
+    }
+  ],
+  "internal_tags": [
+    {
+      "name": "View",
+      "description": "Contains file system information and repository details"
+    },
+    {
+      "name": "policy_spec",
+      "description": "Contains communication, proactiveness and data integrity policies"
+    },
+    {
+      "name": "file_system",
+      "description": "Shows directory structure"
+    },
+    {
+      "name": "repo_overview",
+      "description": "Contains code summaries"
+    }
+  ]
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <div class="editor-area">
+            <div class="editor-header">
+                <h2><i class="fas fa-code"></i> Code Editor</h2>
+                <div class="panel-actions">
+                    <button class="btn" id="format-btn">
+                        <i class="fas fa-redo"></i> Format
+                    </button>
+                    <button class="btn" id="undo-btn">
+                        <i class="fas fa-undo"></i> Undo
+                    </button>
+                </div>
+            </div>
+            
+            <div class="editor-content">
+                <div class="editor-panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-file-code"></i> HTML Editor</h3>
+                    </div>
+                    <div class="panel-content">
+                        <textarea class="code-editor" id="html-editor">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;AI Generated Website&lt;/title&gt;
+  &lt;style&gt;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #1e3a8a, #0f172a);
+      color: #f8fafc;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    header {
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+    
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #4cc9f0, #4361ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .subtitle {
+      font-size: 1.25rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      color: #cbd5e1;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background: #4361ee;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      border: 2px solid #4cc9f0;
+    }
+    
+    .cta-button:hover {
+      background: #3a0ca3;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+    
+    .feature-card {
+      background: rgba(30, 41, 59, 0.6);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: #4cc9f0;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: #4cc9f0;
+    }
+    
+    .feature-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="container"&gt;
+    &lt;header&gt;
+      &lt;h1&gt;AI-Powered Web Development&lt;/h1&gt;
+      &lt;p class="subtitle"&gt;Create stunning websites with the help of artificial intelligence. No coding experience required.&lt;/p&gt;
+      &lt;a href="#" class="cta-button"&gt;Get Started &lt;i class="fas fa-arrow-right"&gt;&lt;/i&gt;&lt;/a&gt;
+    &lt;/header&gt;
+    
+    &lt;div class="features"&gt;
+      &lt;div class="feature-card"&gt;
+        &lt;div class="feature-icon"&gt;
+          &lt;i class="fas fa-lightning-bolt"&gt;&lt;/i&gt;
+        &lt;/div&gt;
+        &lt;h3 class="feature-title"&gt;Lightning Fast&lt;/h3&gt;
+        &lt;p&gt;Generate responsive websites in seconds using our powerful AI algorithms.&lt;/p&gt;
+      &lt;/div&gt;
+      
+      &lt;div class="feature-card"&gt;
+        &lt;div class="feature-icon"&gt;
+          &lt;i class="fas fa-cogs"&gt;&lt;/i&gt;
+        &lt;/div&gt;
+        &lt;h3 class="feature-title"&gt;Advanced Tools&lt;/h3&gt;
+        &lt;p&gt;Access a complete suite of development tools powered by AI assistance.&lt;/p&gt;
+      &lt;/div&gt;
+      
+      &lt;div class="feature-card"&gt;
+        &lt;div class="feature-icon"&gt;
+          &lt;i class="fas fa-mobile-alt"&gt;&lt;/i&gt;
+        &lt;/div&gt;
+        &lt;h3 class="feature-title"&gt;Fully Responsive&lt;/h3&gt;
+        &lt;p&gt;All generated websites work perfectly on any device or screen size.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;script&gt;
+    // Feature card animation
+    const cards = document.querySelectorAll('.feature-card');
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-10px)';
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0)';
+      });
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                    </div>
+                </div>
+                
+                <div class="preview-panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-eye"></i> Website Preview</h3>
+                        <button class="btn" id="refresh-btn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="panel-content">
+                        <iframe class="preview-iframe" id="website-preview"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        // Tab switching functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and panes
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabPanes.forEach(pane => pane.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Show corresponding pane
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+        
+        // Update preview when code changes
+        const htmlEditor = document.getElementById('html-editor');
+        const previewFrame = document.getElementById('website-preview');
+        
+        // Store editor history for undo functionality
+        let editorHistory = [];
+        let historyIndex = -1;
+        
+        function updatePreview() {
+            const htmlCode = htmlEditor.value;
+            const previewDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+            
+            previewDoc.open();
+            previewDoc.write(htmlCode);
+            previewDoc.close();
+        }
+        
+        // Save editor state to history
+        function saveEditorState() {
+            // Only save if the content has changed
+            if (editorHistory[historyIndex] !== htmlEditor.value) {
+                historyIndex++;
+                editorHistory[historyIndex] = htmlEditor.value;
+                // Truncate history if we're not at the end
+                editorHistory = editorHistory.slice(0, historyIndex + 1);
+            }
+        }
+        
+        // Undo functionality
+        document.getElementById('undo-btn').addEventListener('click', () => {
+            if (historyIndex > 0) {
+                historyIndex--;
+                htmlEditor.value = editorHistory[historyIndex];
+                updatePreview();
+            }
+        });
+        
+        // Initial preview update and save state
+        setTimeout(() => {
+            updatePreview();
+            saveEditorState();
+        }, 100);
+        
+        // Update preview on code changes
+        htmlEditor.addEventListener('input', () => {
+            updatePreview();
+            saveEditorState();
+        });
+        
+        // Refresh preview
+        document.getElementById('refresh-btn').addEventListener('click', updatePreview);
+        
+        // Run button functionality
+        document.getElementById('run-btn').addEventListener('click', () => {
+            updatePreview();
+            // Show a success notification
+            const runBtn = document.getElementById('run-btn');
+            const originalText = runBtn.innerHTML;
+            runBtn.innerHTML = '<i class="fas fa-check"></i> Running...';
+            runBtn.style.background = '#10b981';
+            
+            setTimeout(() => {
+                runBtn.innerHTML = originalText;
+                runBtn.style.background = '';
+            }, 2000);
+        });
+        
+        // Save button functionality
+        document.getElementById('save-btn').addEventListener('click', () => {
+            const saveBtn = document.getElementById('save-btn');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved';
+            saveBtn.style.background = '#3b82f6';
+            
+            setTimeout(() => {
+                saveBtn.innerHTML = originalText;
+                saveBtn.style.background = '';
+            }, 2000);
+        });
+        
+        // Format code
+        document.getElementById('format-btn').addEventListener('click', () => {
+            const formattedCode = htmlEditor.value
+                .replace(/\n\s+/g, '\n') // Remove extra indentation
+                .replace(/>\s+</g, '><') // Remove spaces between tags
+                .replace(/\s{2,}/g, ' '); // Collapse multiple spaces
+            
+            htmlEditor.value = formattedCode;
+            updatePreview();
+            saveEditorState();
+        });
+        
+        // Enhanced AI chat functionality
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        const chatMessages = document.getElementById('chat-messages');
+        
+        // Handle message sending
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                // Add user message
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user';
+                userMsg.innerHTML = `${message}<div class="timestamp">Just now</div>`;
+                chatMessages.appendChild(userMsg);
+                
+                // Clear input
+                chatInput.value = '';
+                chatInput.focus();
+                
+                // Add thinking indicator
+                const thinkingMsg = document.createElement('div');
+                thinkingMsg.className = 'message ai thinking';
+                thinkingMsg.innerHTML = `<strong>AI Assistant:</strong> <div class="ai-typing-indicator"><span></span><span></span><span></span></div>`;
+                chatMessages.appendChild(thinkingMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Simulate AI processing delay
+                setTimeout(() => {
+                    // Remove thinking message
+                    thinkingMsg.remove();
+                    
+                    // Generate AI response
+                    const aiResponse = generateAIResponse(message);
+                    
+                    // Add AI response
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'message ai';
+                    
+                    let toolsUsedHTML = '';
+                    if (aiResponse.tools && aiResponse.tools.length > 0) {
+                        toolsUsedHTML = `<div class="tool-used"><i class="fas fa-tools"></i> Used: `;
+                        aiResponse.tools.forEach((tool, index) => {
+                            toolsUsedHTML += `<span class="ai-tool">${tool}</span>`;
+                            if (index < aiResponse.tools.length - 1) toolsUsedHTML += ', ';
+                        });
+                        toolsUsedHTML += '</div>';
+                    }
+                    
+                    aiMsg.innerHTML = `
+                        <strong>AI Assistant:</strong> ${aiResponse.response}
+                        ${toolsUsedHTML}
+                        <div class="timestamp">Just now</div>
+                    `;
+                    
+                    chatMessages.appendChild(aiMsg);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Execute any action associated with the response
+                    if (aiResponse.action) {
+                        aiResponse.action();
+                        saveEditorState();
+                    }
+                }, 1500 + Math.random() * 1000);
+            }
+        }
+        
+        // Generate AI response based on user input and rules
+        function generateAIResponse(message) {
+            const lowerMsg = message.toLowerCase();
+            const toolsUsed = [];
+            let response = "";
+            let action = null;
+            
+            if (lowerMsg.includes('hello') || lowerMsg.includes('hi')) {
+                response = "Hello! I'm your Replit AI assistant. How can I help you with your project today? Remember I prioritize Replit tools and aim for minimal back-and-forth.";
+                toolsUsed.push("restart_workflow");
+            }
+            else if (lowerMsg.includes('responsive') || lowerMsg.includes('mobile')) {
+                response = "I've optimized the website for responsiveness using CSS media queries. The layout now adapts to all device sizes.";
+                toolsUsed.push("str_replace_editor");
+                action = addResponsiveStyles;
+            }
+            else if (lowerMsg.includes('feature') || lowerMsg.includes('card')) {
+                response = "I've added a new features section. You can see the changes in the editor.";
+                toolsUsed.push("str_replace_editor");
+                action = addFeaturesSection;
+            }
+            else if (lowerMsg.includes('dark mode') || lowerMsg.includes('theme')) {
+                response = "Dark mode toggle implemented! I've added theme switching that saves to localStorage.";
+                toolsUsed.push("str_replace_editor", "bash");
+                action = addDarkModeToCode;
+            }
+            else if (lowerMsg.includes('database') || lowerMsg.includes('postgres')) {
+                response = "For PostgreSQL operations, I'll use the create_postgresql_database_tool. After creation, you'll get environment variables for connection.";
+                toolsUsed.push("create_postgresql_database_tool");
+                action = createDatabase;
+            }
+            else if (lowerMsg.includes('api') || lowerMsg.includes('key')) {
+                response = "I need to use the ask_secrets tool to request API keys. Please confirm if I should proceed to ask for necessary credentials.";
+                toolsUsed.push("ask_secrets");
+                action = requestAPIKey;
+            }
+            else if (lowerMsg.includes('deploy') || lowerMsg.includes('publish')) {
+                response = "I'll use the suggest_deploy tool since the project appears ready. Remember, deployment must be initiated manually by you through Replit.";
+                toolsUsed.push("suggest_deploy");
+                action = suggestDeployment;
+            }
+            else if (lowerMsg.includes('file') || lowerMsg.includes('edit')) {
+                response = "I'll use the str_replace_editor tool for this file operation. Please confirm the file path and operation details.";
+                toolsUsed.push("str_replace_editor");
+                action = editFile;
+            }
+            else if (lowerMsg.includes('tool') || lowerMsg.includes('json')) {
+                response = "All available tools are listed in the JSON Tools tab. I prioritize using Replit-native tools over external solutions.";
+            }
+            else if (lowerMsg.includes('rule') || lowerMsg.includes('policy')) {
+                response = "You can find all operational rules in the Rules tab. I strictly follow Communication Policy by using simple language and Data Integrity Policy for error handling.";
+            }
+            else {
+                response = "I've implemented your request following our operational rules. Would you like me to report progress using the report_progress tool?";
+                toolsUsed.push("str_replace_editor", "bash");
+            }
+            
+            return {
+                response,
+                tools: toolsUsed,
+                action
+            };
+        }
+        
+        // Add dark mode to code
+        function addDarkModeToCode() {
+            const darkModeCSS = `
+  body {
+    transition: background 0.5s ease, color 0.3s ease;
+  }
+  
+  body.light-mode {
+    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+    color: #1e293b;
+  }
+  
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #f8fafc;
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+  
+  body.light-mode .theme-toggle {
+    background: rgba(30, 41, 59, 0.1);
+    color: #1e293b;
+  }`;
+            
+            const darkModeJS = `
+    // Theme toggle functionality
+    const themeToggle = document.createElement('button');
+    themeToggle.className = 'theme-toggle';
+    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+    document.body.appendChild(themeToggle);
+    
+    // Check for saved theme preference
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'light') {
+      document.body.classList.add('light-mode');
+      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      if (document.body.classList.contains('light-mode')) {
+        localStorage.setItem('theme', 'light');
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        localStorage.setItem('theme', 'dark');
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+      }
+    });`;
+            
+            // ... (other functions remain the same) ...
+
+// Add dark mode to code - FIXED VERSION
+function addDarkModeToCode() {
+    const darkModeCSS = `
+  body {
+    transition: background 0.5s ease, color 0.3s ease;
+  }
+  
+  body.light-mode {
+    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+    color: #1e293b;
+  }
+  
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #f8fafc;
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+  
+  body.light-mode .theme-toggle {
+    background: rgba(30, 41, 59, 0.1);
+    color: #1e293b;
+  }`;
+
+    const darkModeJS = `
+    // Theme toggle functionality
+    const themeToggle = document.createElement('button');
+    themeToggle.className = 'theme-toggle';
+    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+    document.body.appendChild(themeToggle);
+    
+    // Check for saved theme preference
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'light') {
+      document.body.classList.add('light-mode');
+      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      if (document.body.classList.contains('light-mode')) {
+        localStorage.setItem('theme', 'light');
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        localStorage.setItem('theme', 'dark');
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+      }
+    });`;
+
+    // Add dark mode CSS to the code editor
+    const currentCode = htmlEditor.value;
+    if (!currentCode.includes('body.light-mode')) {
+        // Insert CSS into the style block
+        const styleEnd = currentCode.indexOf('</style>');
+        const newCode = currentCode.substring(0, styleEnd) + 
+                      darkModeCSS + 
+                      currentCode.substring(styleEnd);
+        
+        // Insert JavaScript into the script block
+        const scriptEnd = newCode.indexOf('</script>');
+        const finalCode = newCode.substring(0, scriptEnd) + 
+                        darkModeJS + 
+                        newCode.substring(scriptEnd);
+        
+        htmlEditor.value = finalCode;
+        updatePreview();
+    }
+}
+
+// Add responsive styles - FIXED VERSION
+function addResponsiveStyles() {
+    const responsiveCode = `
+    @media (max-width: 768px) {
+      .features {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      header {
+        padding: 2rem 1rem;
+      }
+      
+      .feature-card {
+        padding: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+      .cta-button {
+        padding: 10px 20px;
+        font-size: 1rem;
+      }
+    }`;
+
+    const currentCode = htmlEditor.value;
+    if (!currentCode.includes('@media (max-width: 768px)')) {
+        const styleEnd = currentCode.indexOf('</style>');
+        const newCode = currentCode.substring(0, styleEnd) + 
+                      responsiveCode + 
+                      currentCode.substring(styleEnd);
+        htmlEditor.value = newCode;
+        updatePreview();
+    }
+}
+
+// Add features section - FIXED VERSION
+function addFeaturesSection() {
+    const newFeatureCard = `
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3 class="feature-title">Secure & Reliable</h3>
+        <p>Built with security best practices and reliable infrastructure.</p>
+      </div>`;
+
+    const currentCode = htmlEditor.value;
+    if (!currentCode.includes('Secure & Reliable')) {
+        // Find the position of the closing features div
+        const featuresEnd = currentCode.indexOf('</div>', currentCode.indexOf('class="features"'));
+        const newCode = currentCode.substring(0, featuresEnd) + 
+                      newFeatureCard + 
+                      currentCode.substring(featuresEnd);
+        htmlEditor.value = newCode;
+        updatePreview();
+    }
+}
+
+// Create database simulation - FIXED VERSION
+function createDatabase() {
+    const dbCode = `
+  // Database connection example
+  const { Pool } = require('pg');
+  
+  const pool = new Pool({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+  });
+  
+  async function queryDatabase() {
+    try {
+      const res = await pool.query('SELECT * FROM users');
+      console.log(res.rows);
+      return res.rows;
+    } catch (err) {
+      console.error('Database error:', err);
+      throw err;
+    }
+  }`;
+
+    const currentCode = htmlEditor.value;
+    if (!currentCode.includes('Database connection example')) {
+        const scriptEnd = currentCode.indexOf('</script>');
+        const newCode = currentCode.substring(0, scriptEnd) + 
+                      dbCode + 
+                      currentCode.substring(scriptEnd);
+        htmlEditor.value = newCode;
+        updatePreview();
+    }
+}
+        
+        // Request API key simulation
+        function requestAPIKey() {
+            // Create input form for API key
+            const apiKeyMsg = document.createElement('div');
+            apiKeyMsg.className = 'message ai';
+            apiKeyMsg.innerHTML = `
+                <strong>AI Assistant:</strong> I need an API key to integrate with the weather service. Please enter it below:
+                <div class="api-key-input" style="margin-top: 10px; display: flex; gap: 10px;">
+                    <input type="text" id="api-key-input" placeholder="Enter API key..." style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #4361ee; background: rgba(15, 23, 42, 0.5); color: white;">
+                    <button id="submit-api-key" style="background: #4361ee; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Submit</button>
+                </div>
+                <div class="timestamp">Just now</div>
+            `;
+            chatMessages.appendChild(apiKeyMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Add event listener for submit button
+            setTimeout(() => {
+                document.getElementById('submit-api-key').addEventListener('click', () => {
+                    const apiKey = document.getElementById('api-key-input').value;
+                    if (apiKey) {
+                        const successMsg = document.createElement('div');
+                        successMsg.className = 'message ai';
+                        successMsg.innerHTML = `
+                            <strong>AI Assistant:</strong> API key received! I've stored it securely in environment variables.
+                            <div class="timestamp">Just now</div>
+                        `;
+                        chatMessages.appendChild(successMsg);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        apiKeyMsg.style.display = 'none';
+                    }
+                });
+            }, 100);
+        }
+        
+        // Suggest deployment
+        function suggestDeployment() {
+            const deployMsg = document.createElement('div');
+            deployMsg.className = 'message ai';
+            deployMsg.innerHTML = `
+                <strong>AI Assistant:</strong> Your project is ready for deployment! 
+                <div style="margin-top: 10px;">
+                    <button id="deploy-btn" class="btn" style="background: #10b981; border-color: #10b981;">
+                        <i class="fas fa-rocket"></i> Deploy to Replit
+                    </button>
+                </div>
+                <div class="timestamp">Just now</div>
+            `;
+            chatMessages.appendChild(deployMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Add event listener for deploy button
+            setTimeout(() => {
+                document.getElementById('deploy-btn').addEventListener('click', () => {
+                    deployMsg.innerHTML = `
+                        <strong>AI Assistant:</strong> Deployment initiated! Your website will be live shortly.
+                        <div class="timestamp">Just now</div>
+                    `;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                });
+            }, 100);
+        }
+        
+        // Simulate file editing
+        function editFile() {
+            const editMsg = document.createElement('div');
+            editMsg.className = 'message ai';
+            editMsg.innerHTML = `
+                <strong>AI Assistant:</strong> I've made the requested changes to the file using the str_replace_editor tool.
+                <div class="tool-used"><i class="fas fa-tools"></i> Used: <span class="ai-tool">str_replace_editor</span></div>
+                <div class="timestamp">Just now</div>
+            `;
+            chatMessages.appendChild(editMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Simulate a code change
+            const currentCode = htmlEditor.value;
+            if (!currentCode.includes('File edited by AI')) {
+                const comment = '\n    <!-- File edited by AI using str_replace_editor tool -->';
+                const containerPosition = currentCode.indexOf('<div class="container">');
+                const newCode = currentCode.substring(0, containerPosition + 23) + 
+                                comment + 
+                                currentCode.substring(containerPosition + 23);
+                htmlEditor.value = newCode;
+                updatePreview();
+            }
+        }
+        
+        // Event listeners for chat
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        sendBtn.addEventListener('click', sendMessage);
+        
+        // Initial focus on chat input
+        chatInput.focus();
+    </script>
+</body>
+</html>
