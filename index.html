@@ -354,10 +354,47 @@
             color: var(--accent-secondary);
         }
 
+        .editor-header-left-group {
+            display: flex;
+            align-items: center;
+            gap: 25px; /* Increased gap for better separation */
+        }
+
+        .url-fetcher-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #urlInput {
+            padding: 7px 15px; /* Adjusted padding */
+            border-radius: 20px;
+            border: 1px solid var(--bg-light-contrast);
+            background: var(--bg-darker);
+            color: var(--text-light);
+            min-width: 280px; 
+            font-size: 0.85rem; /* Slightly smaller font */
+            line-height: 1.4; 
+        }
+        #urlInput::placeholder {
+            color: var(--text-medium);
+            opacity: 0.6;
+        }
+
+        #fetchUrlButton { 
+            padding: 7px 15px; 
+            font-size: 0.85rem; 
+        }
+        #fetchUrlButton i {
+            font-size: 0.9em; /* Adjusted icon size */
+            margin-right: 5px;
+        }
+
+
         .layout-controls {
             display: flex;
             gap: 10px;
-            margin-left: 20px; /* Spacing from other controls */
+            /* margin-left: 20px; /* Removed, handled by editor-header-left-group gap */
         }
 
         .layout-btn i { /* Ensure icons in layout buttons are not too small */
@@ -898,19 +935,25 @@
         
         <div class="editor-area">
             <div class="editor-header">
-                <h2><i class="fas fa-code"></i> Code Editor</h2>
-                <div class="panel-actions">
+                <div class="editor-header-left-group">
+                    <h2><i class="fas fa-code"></i> Code Editor</h2>
+                    <div class="url-fetcher-controls">
+                        <input type="text" id="urlInput" placeholder="Enter URL to fetch source...">
+                        <button id="fetchUrlButton" class="btn"><i class="fas fa-download"></i> Fetch</button>
+                    </div>
+                    <div class="layout-controls">
+                        <button class="btn layout-btn active" data-layout="default" title="Side-by-side editor and preview"><i class="fas fa-columns"></i></button>
+                        <button class="btn layout-btn" data-layout="preview-top" title="Preview on top"><i class="fas fa-layer-group fa-rotate-180"></i></button>
+                        <button class="btn layout-btn" data-layout="editor-top" title="Editor on top"><i class="fas fa-layer-group"></i></button>
+                    </div>
+                </div>
+                <div class="panel-actions"> <!-- This will be pushed right by justify-content: space-between on editor-header -->
                     <button class="btn" id="format-btn">
                         <i class="fas fa-redo"></i> Format
                     </button>
                     <button class="btn" id="undo-btn">
                         <i class="fas fa-undo"></i> Undo
                     </button>
-                </div>
-                <div class="layout-controls">
-                    <button class="btn layout-btn active" data-layout="default" title="Side-by-side editor and preview"><i class="fas fa-columns"></i></button>
-                    <button class="btn layout-btn" data-layout="preview-top" title="Preview on top"><i class="fas fa-layer-group fa-rotate-180"></i></button> <!-- Custom: preview top -->
-                    <button class="btn layout-btn" data-layout="editor-top" title="Editor on top"><i class="fas fa-layer-group"></i></button> <!-- Custom: editor top -->
                 </div>
             </div>
             
@@ -1762,6 +1805,106 @@ function simulatePackageInstall(packageName) {
             });
         });
 
+        // URL Fetcher Functionality
+        const urlInput = document.getElementById('urlInput');
+        const fetchUrlButton = document.getElementById('fetchUrlButton');
+
+        if (fetchUrlButton) { // Ensure button exists before adding listener
+            fetchUrlButton.addEventListener('click', async () => {
+                const url = urlInput.value.trim();
+                const chatMessagesContainer = document.getElementById('chat-messages'); // Define here for broader scope in this listener
+
+                if (!url) {
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'message ai';
+                    errorMsg.innerHTML = `<strong>AI Assistant:</strong> Please enter a URL to fetch.`;
+                    chatMessagesContainer.appendChild(errorMsg);
+                    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+                    urlInput.focus();
+                    return;
+                }
+
+                const thinkingMsg = document.createElement('div');
+                thinkingMsg.className = 'message ai thinking';
+                thinkingMsg.innerHTML = `<strong>AI Assistant:</strong> Fetching source for ${url}... <div class="ai-typing-indicator"><span></span><span></span><span></span></div>`;
+                chatMessagesContainer.appendChild(thinkingMsg);
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+
+                try {
+                    // This is a placeholder for the AI (Jules) using its view_text_website tool.
+                    // The actual tool call would happen in the AI's environment, not directly in client-side JS.
+                    // This simulation demonstrates the UI flow.
+                    let fetchedHtml;
+                    let success = false;
+                    
+                    // Simulate a successful fetch for example.com or any http/https URL for demo purposes
+                    if (url.toLowerCase() === "https://example.com") {
+                        fetchedHtml = `<!DOCTYPE html>
+<html>
+<head>
+<title>Example Domain</title>
+<meta charset="utf-8" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style type="text/css">
+body { background-color: #f0f0f2; margin: 0; padding: 0; font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+div { width: 600px; margin: 5em auto; padding: 2em; background-color: #fdfdff; border-radius: 0.5em; box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02); }
+a:link, a:visited { color: #38488f; text-decoration: none; }
+@media (max-width: 700px) { div { margin: 0 auto; width: auto; } }
+</style>    
+</head>
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>`;
+                        success = true;
+                    } else if (url.startsWith("http://") || url.startsWith("https://")) {
+                         fetchedHtml = `<!DOCTYPE html><html><head><title>Simulated Page: ${url}</title></head><body><h1>Simulated content for ${url}</h1><p>This is placeholder content as direct cross-origin fetching is restricted in browser-run JavaScript. The AI would use its 'view_text_website' tool to get actual content.</p></body></html>`;
+                         success = true;
+                    } else {
+                        // Consider it a failure if not matching example.com or starting with http(s) for this simulation
+                        success = false;
+                    }
+
+                    thinkingMsg.remove(); 
+
+                    if (success) {
+                        htmlEditor.value = fetchedHtml;
+                        updatePreview();
+                        saveEditorState(); 
+
+                        const successChatMsg = document.createElement('div');
+                        successChatMsg.className = 'message ai';
+                        successChatMsg.innerHTML = `<strong>AI Assistant:</strong> Successfully fetched and displayed source for: ${url}`;
+                        chatMessagesContainer.appendChild(successChatMsg);
+                    } else {
+                        const errorChatMsg = document.createElement('div');
+                        errorChatMsg.className = 'message ai';
+                        errorChatMsg.style.borderColor = 'var(--danger)';
+                        errorChatMsg.innerHTML = `<strong>AI Assistant:</strong> Could not fetch source for '${url}'. (Simulated - ensure URL is valid like 'https://example.com' or starts with http/https).`;
+                        chatMessagesContainer.appendChild(errorChatMsg);
+                    }
+                    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+
+                } catch (error) {
+                    thinkingMsg.remove(); 
+                    console.error("Error in fetch URL simulation:", error);
+                    const errorChatMsg = document.createElement('div');
+                    errorChatMsg.className = 'message ai';
+                    errorChatMsg.style.borderColor = 'var(--danger)';
+                    errorChatMsg.innerHTML = `<strong>AI Assistant:</strong> An error occurred: ${error.message}`;
+                    chatMessagesContainer.appendChild(errorChatMsg);
+                    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+                }
+            });
+        }
+
+
         // Initialize: Load AI config, then focus chat input.
         const initialToolsJson = `{
   "tools": [
@@ -1877,7 +2020,7 @@ function simulatePackageInstall(packageName) {
         // Contact Form Submission Handler (Client-side)
         document.body.addEventListener('submit', function(event) {
             if (event.target.id === 'contactForm') {
-                event.preventDefault(); 
+                event.preventDefault(); // Prevent actual submission
 
                 const existingSuccessMsg = document.getElementById('contactFormSuccessMsg');
                 if (existingSuccessMsg) {
